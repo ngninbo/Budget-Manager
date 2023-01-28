@@ -22,6 +22,8 @@
       <module name="Budget_Manager.Topics-Integer_types_and_operations-Theory.main" target="11" />
       <module name="Budget_Manager.Topics-Switch_statement-From_string_to_a_number.main" target="11" />
       <module name="Budget_Manager.Topics-Switch_statement-Theory.main" target="11" />
+      <module name="Budget_Manager.Topics-Wildcards-Packing_bakeries.main" target="11" />
+      <module name="Budget_Manager.Topics-Wildcards-Theory.main" target="11" />
       <module name="Budget_Manager.util.main" target="11" />
     </bytecodeTargetLevel>
   </component>

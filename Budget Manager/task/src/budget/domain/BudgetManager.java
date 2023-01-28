@@ -16,26 +16,32 @@ public class BudgetManager implements Menu, Serializable {
         this.fileManager = purchaseFileManager;
     }
 
+    @Override
     public void showBalance() {
         shoppingList.showBalance();
     }
 
+    @Override
     public void addIncome() {
         shoppingList.addIncome();
     }
 
+    @Override
     public void analyse() {
         shoppingList.analyse();
     }
 
+    @Override
     public void save() {
         fileManager.save(shoppingList);
     }
 
+    @Override
     public void load() {
         this.shoppingList = fileManager.load();
     }
 
+    @Override
     public void addPurchase() {
         shoppingList.addPurchase();
     }

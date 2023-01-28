@@ -8,13 +8,9 @@ import java.util.List;
 
 public class PurchaseViewerContext implements PurchaseViewStrategy {
 
-    private List<Purchase> purchases;
+    private final List<Purchase> purchases;
 
     public PurchaseViewerContext(List<Purchase> purchases) {
-        this.purchases = purchases;
-    }
-
-    public void setPurchases(List<Purchase> purchases) {
         this.purchases = purchases;
     }
 

@@ -16,7 +16,7 @@ import java.util.List;
 
 import static budget.utils.BudgetManagerUtils.*;
 
-public class ShoppingList implements ShoppingListAction, Serializable {
+public class ShoppingList implements Serializable {
 
     private static final long serialVersionUID = 11234L;
 
@@ -24,7 +24,6 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
     private BigDecimal budget = BigDecimal.ONE;
 
-    @Override
     public void showPurchases() {
         if (purchases.isEmpty()) {
             System.out.printf("%nThe purchase list is empty!\n%n");
@@ -59,7 +58,6 @@ public class ShoppingList implements ShoppingListAction, Serializable {
         }
     }
 
-    @Override
     public void addPurchase() {
 
         while (true) {
@@ -90,7 +88,6 @@ public class ShoppingList implements ShoppingListAction, Serializable {
         }
     }
 
-    @Override
     public void analyse() {
 
         while (true) {
@@ -110,12 +107,10 @@ public class ShoppingList implements ShoppingListAction, Serializable {
         }
     }
 
-    @Override
     public void showBalance() {
         System.out.printf("%nBalance: $%s%n\n", budget);
     }
 
-    @Override
     public void addIncome() {
         String input = requestInput("\nEnter income");
 

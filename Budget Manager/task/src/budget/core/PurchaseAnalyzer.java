@@ -17,8 +17,11 @@ public class PurchaseAnalyzer {
     private final List<Purchase> purchases;
     private SortOption option;
 
-    public PurchaseAnalyzer(List<Purchase> purchases) {
-        this.purchases = purchases;
+    private final PurchaseViewer viewer;
+
+    public PurchaseAnalyzer(PurchaseViewer viewer) {
+        this.viewer = viewer;
+        this.purchases = viewer.getPurchases();
     }
 
     public PurchaseAnalyzer withSort(int choice) {
@@ -35,7 +38,8 @@ public class PurchaseAnalyzer {
                     return;
                 }
 
-                new PurchaseViewerContext(new PurchaseSorter(new PurchaseSortContext(purchases)).sortByType()).show();
+                viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseSorter(new PurchaseSortContext(purchases)).sortByType()));
+                viewer.show();
                 System.out.println();
                 break;
             case SORT_CERTAIN_TYPE:
@@ -46,11 +50,11 @@ public class PurchaseAnalyzer {
                 final List<Purchase> purchases = new PurchaseFilter(this.purchases).filterBy(type);
 
                 if (purchases.isEmpty()) {
-                    System.out.println("\nPurchase list is empty");
+                    System.out.printf("%nThe purchase list is empty!\n");
                     return;
                 }
 
-                PurchaseViewer viewer = new PurchaseViewer(new PurchaseSorter(new PurchaseSortContext(purchases)).sortByType(type));
+                viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseSorter(new PurchaseSortContext(purchases)).sortByType(type)));
                 viewer.viewAllByType(type);
                 break;
             case SORT_ALL_PURCHASES:
@@ -58,7 +62,7 @@ public class PurchaseAnalyzer {
                     System.out.println("\nPurchase list is empty");
                     return;
                 }
-                viewer = new PurchaseViewer(new PurchaseSorter(new PurchaseSortContext(this.purchases)).sortAll());
+                viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseSorter(new PurchaseSortContext(this.purchases)).sortAll()));
                 viewer.viewAll();
                 viewer.showTotalPrices("Total");
                 break;

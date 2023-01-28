@@ -1,65 +1,46 @@
 package budget.domain;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Objects;
+import budget.core.FileManager;
+import budget.core.PurchaseFileManager;
 
-import static budget.utils.BudgetManagerUtils.requestInput;
+import java.io.Serializable;
 
 public class BudgetManager implements Serializable {
 
     private static final long serialVersionUID = 1222L;
-    private BigDecimal balance = BigDecimal.ZERO;
-    private final ShoppingList shoppingList;
+    private ShoppingList shoppingList;
+    private final FileManager<ShoppingList> fileManager;
 
-    public BudgetManager(ShoppingList shoppingList) {
+    public BudgetManager(ShoppingList shoppingList, String filename) {
         this.shoppingList = shoppingList;
-    }
-
-    public ShoppingList getShoppingList() {
-        return shoppingList;
+        this.fileManager = new PurchaseFileManager(filename);
     }
 
     public void showBalance() {
-
-        BigDecimal tmp = balance
-                .subtract(shoppingList.getTotalPrice())
-                .setScale(2, RoundingMode.HALF_UP);
-
-        System.out.printf("%nBalance: $%s%n\n", tmp);
+        shoppingList.showBalance();
     }
 
     public void addIncome() {
-        String input = requestInput("\nEnter income");
-
-        if (!input.matches("\\d+")) {
-            return;
-        }
-
-        balance = new BigDecimal(input).setScale(2, RoundingMode.HALF_UP);
-
-        System.out.println("Income was added!\n");
+        shoppingList.addIncome();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BudgetManager)) return false;
-        BudgetManager that = (BudgetManager) o;
-        return Objects.equals(balance, that.balance) && Objects.equals(shoppingList, that.shoppingList);
+    public void analyse() {
+        shoppingList.analyse();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(balance, shoppingList);
+    public void save() {
+        fileManager.save(shoppingList);
     }
 
-    @Override
-    public String toString() {
-        return "BudgetManager{" +
-                "balance=" + balance +
-                ", shoppingList=" + shoppingList +
-                '}';
+    public void load() {
+        this.shoppingList = fileManager.load();
+    }
+
+    public void addPurchase() {
+        shoppingList.addPurchase();
+    }
+
+    public void showPurchases() {
+        shoppingList.show();
     }
 }

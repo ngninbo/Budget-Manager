@@ -2,12 +2,14 @@ package budget.domain;
 
 import budget.core.*;
 import budget.core.view.PurchaseViewer;
+import budget.core.view.PurchaseViewerContext;
 import budget.model.Purchase;
 import budget.utils.PurchaseType;
 import budget.utils.ShowOption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class ShoppingList implements ShoppingListAction, Serializable {
     private static final long serialVersionUID = 11234L;
 
     private final List<Purchase> purchases = new ArrayList<>();
+
+    private BigDecimal budget = BigDecimal.ONE;
 
     @Override
     public void show() {
@@ -32,7 +36,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
                 ShowOption option = ShowOption.getOption(choice - 1);
 
-                PurchaseViewer viewer = new PurchaseViewer(purchases);
+                PurchaseViewer viewer = new PurchaseViewer(new PurchaseViewerContext(purchases));
 
                 switch (option) {
                     case BACK:
@@ -44,7 +48,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                         break;
                     default:
                         final String type = PurchaseType.getPurchaseType(option.ordinal()).capitalize();
-                        viewer = new PurchaseViewer(new PurchaseFilter(purchases).filterBy(type));
+                        viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseFilter(purchases).filterBy(type)));
                         viewer.viewAllByType(type);
                         break;
                 }
@@ -66,8 +70,18 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                     return;
                 }
 
-                Purchase purchase = PurchaseFactory.getPurchase(PurchaseType.getPurchaseType(choice - 1));
+                final PurchaseType purchaseType = PurchaseType.getPurchaseType(choice - 1);
+                String name = requestInput("\nEnter purchase name");
+                BigDecimal price = new BigDecimal(requestInput("Enter its price")
+                        .replace("$", ""))
+                        .setScale(2, RoundingMode.HALF_UP);
+
+                Purchase purchase = PurchaseBuilder.init()
+                        .withType(purchaseType)
+                        .withName(name).withPrice(price).build();
+
                 purchases.add(purchase);
+                budget = budget.subtract(purchase.getPrice()).setScale(2, RoundingMode.HALF_UP);
                 System.out.println("Purchase was added!");
             } catch (Exception e) {
                 System.out.println("Unknown purchase type");
@@ -87,7 +101,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                     return;
                 }
 
-                new PurchaseAnalyzer(purchases).withSort(choice - 1).analyse();
+                new PurchaseAnalyzer(new PurchaseViewer(new PurchaseViewerContext(purchases))).withSort(choice - 1).analyse();
 
             } catch (Exception e) {
                 System.out.println("Unknown sort strategy");
@@ -95,9 +109,22 @@ public class ShoppingList implements ShoppingListAction, Serializable {
         }
     }
 
-    public BigDecimal getTotalPrice() {
-        return purchases.stream()
-                .map(Purchase::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    @Override
+    public void showBalance() {
+        System.out.printf("%nBalance: $%s%n\n", budget);
+    }
+
+    @Override
+    public void addIncome() {
+        String input = requestInput("\nEnter income");
+
+        if (!input.matches("\\d+")) {
+            System.out.println();
+            return;
+        }
+
+        budget = budget.add(new BigDecimal(input).setScale(2, RoundingMode.HALF_UP));
+
+        System.out.println("Income was added!\n");
     }
 }

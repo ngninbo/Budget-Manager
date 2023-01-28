@@ -1,21 +1,16 @@
 package budget;
 
-import budget.core.PurchaseFileManger;
 import budget.domain.BudgetManager;
-import budget.domain.ShoppingList;
 
 import static budget.utils.BudgetManagerUtils.MENU_ITEMS;
 import static budget.utils.BudgetManagerUtils.choiceAction;
 
 public class BudgetManagerApplication implements Runnable {
 
-    private BudgetManager budgetManager;
-    private ShoppingList shoppingList = new ShoppingList();
-    private final PurchaseFileManger fileManger;
+    private final BudgetManager budgetManager;
 
-    public BudgetManagerApplication(String filename) {
-        this.fileManger = new PurchaseFileManger(filename);
-        this.budgetManager = new BudgetManager(shoppingList);
+    public BudgetManagerApplication(BudgetManager budgetManager) {
+        this.budgetManager = budgetManager;
     }
 
     @Override
@@ -36,22 +31,22 @@ public class BudgetManagerApplication implements Runnable {
                         budgetManager.addIncome();
                         break;
                     case "Add purchase":
-                        shoppingList.addPurchase();
+                        budgetManager.addPurchase();
                         break;
                     case "Show list of purchases":
-                        shoppingList.show();
+                        budgetManager.showPurchases();
                         break;
                     case "Balance":
                         budgetManager.showBalance();
                         break;
                     case "Save":
-                        save();
+                        budgetManager.save();
                         break;
                     case "Load":
-                        load();
+                        this.budgetManager.load();
                         break;
                     case "Analyze (Sort)":
-                        shoppingList.analyse();
+                        budgetManager.analyse();
                         break;
                     case "Exit":
                         System.out.println("\nBye!");
@@ -61,16 +56,5 @@ public class BudgetManagerApplication implements Runnable {
                 }
             }
         }
-    }
-
-    public void save() {
-        fileManger.save(budgetManager);
-        System.out.println("\nPurchases were saved!\n");
-    }
-
-    public void load() {
-        this.budgetManager = fileManger.load();
-        this.shoppingList = budgetManager.getShoppingList();
-        System.out.println("\nPurchases were loaded!\n");
     }
 }

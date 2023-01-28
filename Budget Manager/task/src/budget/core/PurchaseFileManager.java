@@ -1,41 +1,41 @@
 package budget.core;
 
-import budget.domain.BudgetManager;
 import budget.domain.ShoppingList;
 import budget.utils.PurchaseSerializer;
 
 import java.io.File;
 import java.io.IOException;
 
-public class PurchaseFileManger {
+public class PurchaseFileManager implements FileManager<ShoppingList> {
 
     private final String filename;
-    private BudgetManager budgetManager;
 
-    public PurchaseFileManger(String filename) {
+    public PurchaseFileManager(String filename) {
         this.filename = filename;
     }
 
-    public void save(BudgetManager budgetManager) {
+    public void save(ShoppingList shoppingList) {
         try {
-            PurchaseSerializer.serialize(budgetManager, filename);
+            PurchaseSerializer.serialize(shoppingList, filename);
+            System.out.println("\nPurchases were saved!\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public BudgetManager load() {
+    public ShoppingList load() {
         File file = new File(filename);
+
         if (file.exists()) {
             try {
-                budgetManager = PurchaseSerializer.deserialize(filename);
+                return PurchaseSerializer.deserialize(filename);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+            } finally {
+                System.out.println("\nPurchases were loaded!\n");
             }
-        } else {
-            budgetManager = new BudgetManager(new ShoppingList());
         }
 
-        return budgetManager;
+        return new ShoppingList();
     }
 }

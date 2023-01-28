@@ -5,6 +5,7 @@ import budget.core.sort.PurchaseSorter;
 import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
 import budget.model.Purchase;
+import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
 import budget.utils.SortOption;
 
@@ -46,7 +47,7 @@ public class PurchaseAnalyzer {
 
                 int choice = choicePurchaseType();
 
-                String type = PurchaseType.getPurchaseType(choice - 1).capitalize();
+                String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(choice - 1).name());
                 final List<Purchase> purchases = new PurchaseFilter(this.purchases).filterBy(type);
 
                 if (purchases.isEmpty()) {

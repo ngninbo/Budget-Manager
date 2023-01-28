@@ -1,16 +1,17 @@
 package budget;
 
 import budget.domain.BudgetManager;
+import budget.domain.Menu;
 
 import static budget.utils.BudgetManagerUtils.MENU_ITEMS;
 import static budget.utils.BudgetManagerUtils.choiceAction;
 
 public class BudgetManagerApplication implements Runnable {
 
-    private final BudgetManager budgetManager;
+    private final Menu menu;
 
-    public BudgetManagerApplication(BudgetManager budgetManager) {
-        this.budgetManager = budgetManager;
+    public BudgetManagerApplication(BudgetManager menu) {
+        this.menu = menu;
     }
 
     @Override
@@ -28,28 +29,28 @@ public class BudgetManagerApplication implements Runnable {
 
                 switch (item) {
                     case "Add income":
-                        budgetManager.addIncome();
+                        menu.addIncome();
                         break;
                     case "Add purchase":
-                        budgetManager.addPurchase();
+                        menu.addPurchase();
                         break;
                     case "Show list of purchases":
-                        budgetManager.showPurchases();
+                        menu.showPurchases();
                         break;
                     case "Balance":
-                        budgetManager.showBalance();
+                        menu.showBalance();
                         break;
                     case "Save":
-                        budgetManager.save();
+                        menu.save();
                         break;
                     case "Load":
-                        this.budgetManager.load();
+                        this.menu.load();
                         break;
                     case "Analyze (Sort)":
-                        budgetManager.analyse();
+                        menu.analyse();
                         break;
                     case "Exit":
-                        System.out.println("\nBye!");
+                        menu.exit();
                         return;
                     default:
                         // Implement me

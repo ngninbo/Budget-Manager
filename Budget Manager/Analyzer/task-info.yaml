@@ -1118,6 +1118,9 @@ files:
 - name: src/budget/core/FileManager.java
   visible: true
   learner_created: true
+- name: src/budget/domain/Menu.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment
 status: Solved
 feedback:

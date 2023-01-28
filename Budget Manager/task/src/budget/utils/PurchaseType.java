@@ -18,10 +18,6 @@ public enum PurchaseType {
                 .collect(Collectors.toList());
     }
 
-    public String capitalize() {
-        return BudgetManagerUtils.capitalize(this.name());
-    }
-
     public static PurchaseType getPurchaseType(int ordinal) {
         return Arrays.stream(values())
                 .filter(purchaseType -> purchaseType.ordinal() == ordinal)

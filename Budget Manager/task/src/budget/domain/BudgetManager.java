@@ -5,15 +5,15 @@ import budget.core.PurchaseFileManager;
 
 import java.io.Serializable;
 
-public class BudgetManager implements Serializable {
+public class BudgetManager implements Menu, Serializable {
 
     private static final long serialVersionUID = 1222L;
     private ShoppingList shoppingList;
     private final FileManager<ShoppingList> fileManager;
 
-    public BudgetManager(ShoppingList shoppingList, String filename) {
+    public BudgetManager(ShoppingList shoppingList, PurchaseFileManager purchaseFileManager) {
         this.shoppingList = shoppingList;
-        this.fileManager = new PurchaseFileManager(filename);
+        this.fileManager = purchaseFileManager;
     }
 
     public void showBalance() {
@@ -40,7 +40,13 @@ public class BudgetManager implements Serializable {
         shoppingList.addPurchase();
     }
 
+    @Override
     public void showPurchases() {
-        shoppingList.show();
+        shoppingList.showPurchases();
+    }
+
+    @Override
+    public void exit() {
+        System.out.println("\nBye!");
     }
 }

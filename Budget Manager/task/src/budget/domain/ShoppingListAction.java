@@ -2,7 +2,7 @@ package budget.domain;
 
 public interface ShoppingListAction {
 
-    void show();
+    void showPurchases();
     void addPurchase();
     void analyse();
     void showBalance();

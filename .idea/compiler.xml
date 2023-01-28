@@ -15,6 +15,11 @@
       <module name="Budget_Manager.Topics-Conditional_statement-Leap_year.main" target="11" />
       <module name="Budget_Manager.Topics-Conditional_statement-The_army_of_units.main" target="11" />
       <module name="Budget_Manager.Topics-Conditional_statement-Theory.main" target="11" />
+      <module name="Budget_Manager.Topics-Integer_types_and_operations-First_digit.main" target="11" />
+      <module name="Budget_Manager.Topics-Integer_types_and_operations-How_many_nuts_each_squirrel_will_get.main" target="11" />
+      <module name="Budget_Manager.Topics-Integer_types_and_operations-Next_even_number.main" target="11" />
+      <module name="Budget_Manager.Topics-Integer_types_and_operations-Reading_integer_numbers.main" target="11" />
+      <module name="Budget_Manager.Topics-Integer_types_and_operations-Theory.main" target="11" />
       <module name="Budget_Manager.Topics-Switch_statement-From_string_to_a_number.main" target="11" />
       <module name="Budget_Manager.Topics-Switch_statement-Theory.main" target="11" />
       <module name="Budget_Manager.util.main" target="11" />

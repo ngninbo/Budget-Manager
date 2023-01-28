@@ -4,6 +4,7 @@ import budget.core.*;
 import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
 import budget.model.Purchase;
+import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
 import budget.utils.ShowOption;
 
@@ -24,7 +25,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
     private BigDecimal budget = BigDecimal.ONE;
 
     @Override
-    public void show() {
+    public void showPurchases() {
         if (purchases.isEmpty()) {
             System.out.printf("%nThe purchase list is empty!\n%n");
             return;
@@ -47,7 +48,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                         viewer.showTotalPrices("Total sum");
                         break;
                     default:
-                        final String type = PurchaseType.getPurchaseType(option.ordinal()).capitalize();
+                        final String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(option.ordinal()).name());
                         viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseFilter(purchases).filterBy(type)));
                         viewer.viewAllByType(type);
                         break;

@@ -2,6 +2,7 @@ package budget.core.sort;
 
 import budget.core.PurchaseFilter;
 import budget.model.Purchase;
+import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
 
 import java.math.BigDecimal;
@@ -33,13 +34,14 @@ public class PurchaseSortContext implements PurchaseSortStrategy {
 
         Map<String, BigDecimal> map = new HashMap<>();
 
-        for (PurchaseType type : PurchaseType.values()) {
-            List<Purchase> tmp = new PurchaseFilter(purchases).filterBy(type.capitalize());
+        for (PurchaseType purchaseType : PurchaseType.values()) {
+            String type = BudgetManagerUtils.capitalize(purchaseType.name());
+            List<Purchase> tmp = new PurchaseFilter(purchases).filterBy(type);
             BigDecimal sum = tmp.stream()
                     .map(Purchase::getPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            map.put(type.capitalize(), sum);
+            map.put(type, sum);
         }
 
         return map.entrySet()

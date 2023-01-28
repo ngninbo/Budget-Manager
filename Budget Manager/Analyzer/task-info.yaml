@@ -1,0 +1,1121 @@
+type: edu
+custom_name: stage5
+files:
+- name: src/budget/Main.java
+  visible: true
+  text: |
+    package budget;
+
+    public class Main {
+        public static void main(String[] args) {
+            // write your code here
+        }
+    }
+  learner_created: false
+- name: test/BudgetManagerTest.java
+  visible: false
+  text: |
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+
+    import java.io.File;
+    import java.util.List;
+    import java.util.regex.Matcher;
+    import java.util.regex.Pattern;
+
+    public class BudgetManagerTest extends StageTest<String> {
+
+
+        @Override
+        public List<TestCase<String>> generate() {
+            return List.of(
+
+                    new TestCase<String>()
+                            .setInput("0\n")
+                            .setCheckFunc(BudgetManagerTest::test1),
+
+                    new TestCase<String>()
+                            .setInput("0\n")
+                            .setCheckFunc(BudgetManagerTest::test2),
+
+                    new TestCase<String>()
+                            .setInput("4\n0")
+                            .setCheckFunc(BudgetManagerTest::test3),
+
+                    new TestCase<String>()
+                            .setInput("1\n400\n4\n1\n200\n4\n0")
+                            .setCheckFunc(BudgetManagerTest::test4),
+
+                    new TestCase<String>()
+                            .setInput("1\n1000\n2\n" +
+                                    "1\nAlmond 250g\n35.43\n" +
+                                    "1\nMilk\n3.50\n" +
+                                    "1\nRed Fuji Apple\n5.99\n" +
+                                    "1\nEggs\n3.99\n" +
+                                    "1\nFIJI Natural Artesian Water\n25.98\n" +
+                                    "1\nHershey's milk chocolate bars\n8.54\n" +
+                                    "1\nGreat Value Broccoli Florets\n1.00\n" +
+                                    "1\nKeystone Ground Bee\n6.28\n" +
+                                    "2\nGildan LT\n8.61\n" +
+                                    "2\nMen's Dual Defense Crew Socks 12 Pairs\n13.00\n" +
+                                    "2\nWrangler Men's Stretch Cargo Pant\n19.97\n" +
+                                    "3\nLEGO DUPLO Town Farm Animals\n10.10\n" +
+                                    "3\nCinema\n8.73\n" +
+                                    "3\nSkate rental\n30\n" +
+                                    "4\nSensodyne Pronamel Toothpaste\n19.74\n" +
+                                    "4\nChick-fil-A $10 Gift Card\n10\n" +
+                                    "4\nDebt\n3.50\n" +
+                                    "5\n5\n0")
+                            .setCheckFunc(BudgetManagerTest::test5),
+
+                    new TestCase<String>()
+                            .setInput("6\n4\n3\n5\n1\n6\n0")
+                            .setCheckFunc(BudgetManagerTest::test6),
+
+                    new TestCase<String>()
+                            .setInput("7\n1\n2\n3\n4\n4\n6\n7\n1\n2\n3\n1\n4\n0")
+                            .setCheckFunc(BudgetManagerTest::test7)
+            );
+        }
+
+
+        //Checking program stop
+        private static CheckResult test1(String reply, String attach) {
+            if (!reply.contains("Bye!")) {
+                return new CheckResult(false,
+                        "Your program should stop after choosing \"Exit\"");
+            }
+            return new CheckResult(true);
+        }
+
+
+        //Checking menu
+        private static CheckResult test2(String reply, String attach) {
+            String[] menuPatterns = {"1)", "2)", "3)", "4)", "0)"};
+            for (String menuPattern : menuPatterns) {
+                if (!reply.contains(menuPattern)) {
+                    return new CheckResult(false,
+                            "Your menu doesn't have item " + menuPattern);
+                }
+            }
+            return new CheckResult(true);
+        }
+
+
+        //Checking balance
+        private static CheckResult test3(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 4) {
+                return new CheckResult(false,
+                        "Your program shows wrong blocks of output. Expected: 4\n" +
+                                "You have: " + blocks.length + "\n" +
+                                "Make sure that you print an empty line after each chosen action");
+            }
+
+            String balance = blocks[1];
+
+            if (!balance.toLowerCase().contains("balance")) {
+                return new CheckResult(false,
+                        "Your program should show balance after choosing 4th item");
+            }
+
+            Pattern doublePattern = Pattern.compile("\\d+[,.]\\d+");
+            Matcher matcher = doublePattern.matcher(balance);
+
+            if (!matcher.find()) {
+                return new CheckResult(false,
+                        "Your balance should contain a number!");
+            }
+
+            double balanceDouble = Double.parseDouble(matcher.group());
+
+            if (Math.abs(balanceDouble - 0) > 0.0001) {
+                System.out.println(balance);
+                return new CheckResult(false,
+                        "Balance should be $0.00 at the beginning");
+            }
+
+            return new CheckResult(true);
+        }
+
+
+        //Checking adding income
+        private static CheckResult test4(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 10) {
+                return new CheckResult(false,
+                        "Your program shows wrong blocks of output. Expected: 10\n" +
+                                "You have: " + blocks.length + "\n" +
+                                "Make sure that you print an empty line after each chosen action");
+            }
+
+            String balanceAfterFirstAddingIncome = blocks[3];
+
+            if (!balanceAfterFirstAddingIncome.contains("$400")) {
+                return new CheckResult(false,
+                        "Balance is wrong after adding income!.\n" +
+                                "Expected:\n" +
+                                "Balance: $400.00\n" +
+                                "Your output:\n" +
+                                balanceAfterFirstAddingIncome);
+            }
+
+            return new CheckResult(true);
+        }
+
+        //Checking the saving purchases
+        private static CheckResult test5(String reply, String attach) {
+            File file = new File("purchases.txt");
+            if (!file.exists()) {
+                return new CheckResult(false,
+                        "Your program should create purchase.txt file and save purchases there!");
+            }
+            return new CheckResult(true);
+        }
+
+        //Checking the downloading purchases
+        private static CheckResult test6(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 12) {
+                return new CheckResult(false,
+                        "Your program shows wrong blocks of output. Expected: 12\n" +
+                                "You have: " + blocks.length + "\n" +
+                                "Make sure that you print an empty line after each chosen action");
+            }
+
+            String balanceAfterDownloadingPurchases = blocks[3];
+
+            if (!balanceAfterDownloadingPurchases.replace(",", ".").contains("785.64")) {
+                return new CheckResult(false,
+                        "Your program reads balance from file wrong!");
+            }
+
+            //All purchases list
+
+            String allPurchases = blocks[6];
+
+            String[] expectedPurchases = {
+                    "Almond 250g $35.43",
+                    "Milk $3.50",
+                    "Red Fuji Apple $5.99",
+                    "Eggs $3.99",
+                    "FIJI Natural Artesian Water $25.98",
+                    "Hershey's milk chocolate bars $8.54",
+                    "Great Value Broccoli Florets $1.00",
+                    "Keystone Ground Bee $6.28",
+                    "Gildan LT $8.61",
+                    "Men's Dual Defense Crew Socks 12 Pairs $13.00",
+                    "Wrangler Men's Stretch Cargo Pant $19.97",
+                    "LEGO DUPLO Town Farm Animals $10.10",
+                    "Cinema $8.73",
+                    "Skate rental $30.00",
+                    "Sensodyne Pronamel Toothpaste $19.74",
+                    "Chick-fil-A $10 Gift Card $10.00",
+                    "Debt $3.50"
+            };
+
+            for (String expectedPurchase : expectedPurchases) {
+                if (!allPurchases.contains(expectedPurchase)) {
+                    return new CheckResult(false,
+                            "Your all purchases list doesn't have purchase:\n" +
+                                    expectedPurchase + "\n" +
+                                    "But should have!");
+                }
+            }
+
+            String[] temp = allPurchases.split("\n");
+            String totalSum = temp[temp.length - 1];
+
+            Pattern doublePattern = Pattern.compile("\\d+[,.]\\d+");
+            Matcher matcher = doublePattern.matcher(totalSum);
+
+            if (!matcher.find()) {
+                return new CheckResult(false,
+                        "Total sum of all purchases is wrong. Expected:\n" +
+                                "Total sum: $214.36\n" +
+                                "Your output:\n" +
+                                totalSum);
+            }
+
+            double allTotalSum = Double.parseDouble(matcher.group());
+
+            if (Math.abs(allTotalSum - 214.36) > 0.0001) {
+                return new CheckResult(false,
+                        "Your all total sum is wrong!");
+            }
+
+            //Food list
+
+            String foodList = blocks[8];
+
+            expectedPurchases = new String[]{
+                    "Almond 250g $35.43",
+                    "Milk $3.50",
+                    "Red Fuji Apple $5.99",
+                    "Eggs $3.99",
+                    "FIJI Natural Artesian Water $25.98",
+                    "Hershey's milk chocolate bars $8.54",
+                    "Great Value Broccoli Florets $1.00",
+                    "Keystone Ground Bee $6.28"
+            };
+
+            for (String expectedPurchase : expectedPurchases) {
+                if (!foodList.contains(expectedPurchase)) {
+                    return new CheckResult(false,
+                            "Your food list doesn't have purchase:\n" +
+                                    expectedPurchase + "\n" +
+                                    "But should have!");
+                }
+            }
+
+            temp = foodList.split("\n");
+            totalSum = temp[temp.length - 1];
+
+            matcher = doublePattern.matcher(totalSum);
+
+            if (!matcher.find()) {
+                return new CheckResult(false,
+                        "Total sum of food list is wrong. Expected:\n" +
+                                "Total sum: $90.71\n" +
+                                "Your output:\n" + totalSum);
+            }
+
+            double foodTotalSum = Double.parseDouble(matcher.group());
+
+            if (Math.abs(foodTotalSum - 90.71) > 0.0001) {
+                return new CheckResult(false,
+                        "Your food total sum is wrong!");
+            }
+
+            return new CheckResult(true);
+        }
+
+
+        //Sorting check
+        private static CheckResult test7(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 22) {
+                return new CheckResult(false,
+                        "Your program shows wrong blocks of output. Expected: 22\n" +
+                                "You have: " + blocks.length + "\n" +
+                                "Make sure that you print an empty line after each chosen action");
+            }
+
+            String sortEmptyAllPurchases = blocks[2];
+
+            if (!sortEmptyAllPurchases.contains("list is empty")) {
+                return new CheckResult(false,
+                        "\"Sort all purchases\" item shouldn't work if there are no purchases in the list.\n" +
+                                "You should print 'List is empty!'");
+            }
+
+            String sortByEmptyType = blocks[4];
+
+            if (sortByEmptyType.contains("list is empty")) {
+                return new CheckResult(false,
+                        "\"Sort by type\" item should work even if there are no purchases in the list\n" +
+                                "You should print each category with total sum $0\n" +
+                                "Your output shouldn't contain 'List is empty!'");
+            }
+
+            String sortEmptyCertainType = blocks[7];
+
+            if (!sortEmptyCertainType.contains("list is empty")) {
+                return new CheckResult(false,
+                        "\"Sort certain type\" item shouldn't work if there are no purchases in the certain list\n" +
+                                "You should print 'List is empty'");
+            }
+
+            String allSorted = blocks[13];
+            String rightSorted = "Almond 250g $35.43\n" +
+                    "Skate rental $30.00\n" +
+                    "FIJI Natural Artesian Water $25.98\n" +
+                    "Wrangler Men's Stretch Cargo Pant $19.97\n" +
+                    "Sensodyne Pronamel Toothpaste $19.74\n" +
+                    "Men's Dual Defense Crew Socks 12 Pairs $13.00\n" +
+                    "LEGO DUPLO Town Farm Animals $10.10\n" +
+                    "Chick-fil-A $10 Gift Card $10.00\n" +
+                    "Cinema $8.73\n" +
+                    "Gildan LT $8.61\n" +
+                    "Hershey's milk chocolate bars $8.54\n" +
+                    "Keystone Ground Bee $6.28\n" +
+                    "Red Fuji Apple $5.99\n" +
+                    "Eggs $3.99\n" +
+                    "Milk $3.50\n" +
+                    "Debt $3.50\n" +
+                    "Great Value Broccoli Florets $1.00";
+
+            if (!allSorted.contains(rightSorted)) {
+                return new CheckResult(false,
+                        "Your program sort all purchases wrong!\n" +
+                                "Expected:\n" +
+                                rightSorted + "\n" +
+                                "Your output:\n" +
+                                allSorted);
+            }
+
+
+            String sortedByType = blocks[15];
+            String rightSortedByType = "Food - $90.71\n" +
+                    "Entertainment - $48.83\n" +
+                    "Clothes - $41.58\n" +
+                    "Other - $33.24";
+
+            if (!sortedByType.contains(rightSortedByType)) {
+                return new CheckResult(false,
+                        "Your program sort by type wrong!\n" +
+                                "Expected:\n" +
+                                rightSortedByType + "\n" +
+                                "Your output:\n" +
+                                sortedByType);
+            }
+
+            String sortedCertainType = blocks[18];
+            String rightSortedCertainType = "Almond 250g $35.43\n" +
+                    "FIJI Natural Artesian Water $25.98\n" +
+                    "Hershey's milk chocolate bars $8.54\n" +
+                    "Keystone Ground Bee $6.28\n" +
+                    "Red Fuji Apple $5.99\n" +
+                    "Eggs $3.99\n" +
+                    "Milk $3.50\n" +
+                    "Great Value Broccoli Florets $1.00";
+
+            if (!sortedCertainType.contains(rightSortedCertainType)) {
+                return new CheckResult(false,
+                        "Your program sort certain type wrong!\n" +
+                                "Expected:\n" +
+                                rightSortedCertainType + "\n" +
+                                "Your output:\n" +
+                                sortedCertainType);
+            }
+
+            return new CheckResult(true);
+        }
+    }
+  learner_created: false
+- name: src/budget/domain/ShoppingList.java
+  visible: true
+  text: |
+    package budget.domain;
+
+    import budget.core.PurchaseViewStrategy;
+    import budget.core.PurchaseViewerContext;
+    import budget.model.Purchase;
+    import budget.utils.PurchaseType;
+
+    import java.io.Serializable;
+    import java.math.BigDecimal;
+    import java.util.ArrayList;
+    import java.util.List;
+
+    import static budget.utils.BudgetManagerUtils.choiceTypeOfPurchase;
+    import static budget.utils.BudgetManagerUtils.choiceTypeOfPurchases;
+
+    public class ShoppingList implements ShoppingListAction, Serializable {
+
+        private static final long serialVersionUID = 11234L;
+
+        private final List<Purchase> purchases = new ArrayList<>();
+
+        @Override
+        public void show() {
+            if (purchases.isEmpty()) {
+                System.out.printf("%nThe purchase list is empty!\n%n");
+                return;
+            }
+
+            while (true) {
+                try {
+                    int choice = choiceTypeOfPurchases();
+                    PurchaseViewStrategy strategy = new PurchaseViewerContext(purchases);
+
+                    final int back = 6;
+                    final int all = 5;
+                    switch (choice) {
+                        case back:
+                            System.out.println();
+                            return;
+                        case all:
+                            strategy.viewAll();
+                            break;
+                        default:
+                            strategy.viewAllByType(PurchaseType.getPurchaseType(choice - 1));
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Unknown purchase type");
+                }
+            }
+        }
+
+        @Override
+        public void addPurchase() {
+
+            while (true) {
+                try {
+                    int choice = choiceTypeOfPurchase();
+                    final int back = 5;
+                    if (choice == back) {
+                        System.out.println();
+                        return;
+                    }
+                    Purchase purchase = PurchaseFactory.getPurchase(PurchaseType.getPurchaseType(choice - 1));
+                    if (purchase != null) {
+                        purchases.add(purchase);
+                        System.out.println("Purchase was added!");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Unknown purchase type");
+                }
+            }
+        }
+
+        public BigDecimal getTotalPrice() {
+            return purchases.stream()
+                    .map(Purchase::getPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+    }
+  learner_created: true
+- name: src/budget/domain/PurchaseFactory.java
+  visible: true
+  text: |
+    package budget.domain;
+
+    import budget.model.Clothes;
+    import budget.model.Entertainment;
+    import budget.model.Food;
+    import budget.model.Purchase;
+    import budget.utils.PurchaseType;
+
+    import java.math.BigDecimal;
+    import java.math.RoundingMode;
+
+    import static budget.utils.BudgetManagerUtils.requestInput;
+
+    public class PurchaseFactory {
+
+        public static Purchase getPurchase(PurchaseType type) {
+
+            String name = requestInput("\nEnter purchase name");
+            BigDecimal price = new BigDecimal(requestInput("Enter its price")
+                    .replace("$", ""))
+                    .setScale(2, RoundingMode.HALF_UP);
+
+            switch (type) {
+                case FOOD:
+                    return new Food(name, price);
+                case CLOTHES:
+                    return new Clothes(name, price);
+                case ENTERTAINMENT:
+                    return new Entertainment(name, price);
+                case OTHER:
+                    return new Purchase(name, price);
+                default:
+                    return null;
+            }
+        }
+    }
+  learner_created: true
+- name: purchases.txt
+  visible: true
+  text: "��\0\x05sr\0\ebudget.domain.BudgetManager\0\0\0\0\0\0\x04�\x02\0\x02L\0\a\
+    balancet\0\x16Ljava/math/BigDecimal;L\0\fshoppingListt\0\x1cLbudget/domain/ShoppingList;xpsr\0\
+    \x14java.math.BigDecimalT�\x15W��(O\x03\0\x02I\0\x05scaleL\0\x06intValt\0\x16\
+    Ljava/math/BigInteger;xr\0\x10java.lang.Number���\x1d\v���\x02\0\0xp\0\0\0\x02\
+    sr\0\x14java.math.BigInteger���\x1f�;�\x1d\x03\0\x06I\0\bbitCountI\0\tbitLengthI\0\
+    \x13firstNonzeroByteNumI\0\flowestSetBitI\0\x06signum[\0\tmagnitudet\0\x02[Bxq\0\
+    ~\0\x06����������������\0\0\0\x01ur\0\x02[B��\x17�\x06\bT�\x02\0\0xp\0\0\0\x03\
+    \x01��xxsr\0\x1abudget.domain.ShoppingList\0\0\0\0\0\0+�\x02\0\x01L\0\tpurchasest\0\
+    \x10Ljava/util/List;xpsr\0\x13java.util.ArrayListx��\x1d��a�\x03\0\x01I\0\x04\
+    sizexp\0\0\0\x11w\x04\0\0\0\x11sr\0\x11budget.model.Food\x15�}�J�{\x04\x02\0\0\
+    xr\0\x15budget.model.Purchase\0\0\0\0\0\0\0\x01\x02\0\x02L\0\x04namet\0\x12Ljava/lang/String;L\0\
+    \x05priceq\0~\0\x01xpt\0\vAlmond 250gsq\0~\0\x04\0\0\0\x02sq\0~\0\b�����������\
+    �����\0\0\0\x01uq\0~\0\v\0\0\0\x02\n�xxsq\0~\0\x12t\0\x04Milksq\0~\0\x04\0\0\0\
+    \x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x01^xxsq\0~\0\x12t\0\
+    \x0eRed Fuji Applesq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0\
+    ~\0\v\0\0\0\x02\x02Wxxsq\0~\0\x12t\0\x04Eggssq\0~\0\x04\0\0\0\x02sq\0~\0\b����\
+    ������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x01�xxsq\0~\0\x12t\0\eFIJI Natural Artesian\
+    \ Watersq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\
+    \x02\n&xxsq\0~\0\x12t\0\x1dHershey's milk chocolate barssq\0~\0\x04\0\0\0\x02\
+    sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x03Vxxsq\0~\0\x12t\0\x1c\
+    Great Value Broccoli Floretssq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\
+    \0\x01uq\0~\0\v\0\0\0\x01dxxsq\0~\0\x12t\0\x13Keystone Ground Beesq\0~\0\x04\0\
+    \0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x02txxsr\0\x14\
+    budget.model.Clothes�\x0e����q^\x02\0\0xq\0~\0\x13t\0\tGildan LTsq\0~\0\x04\0\0\
+    \0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x03]xxsq\0~\0=t\0\
+    &Men's Dual Defense Crew Socks 12 Pairssq\0~\0\x04\0\0\0\x02sq\0~\0\b���������\
+    �������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x05\x14xxsq\0~\0=t\0!Wrangler Men's Stretch\
+    \ Cargo Pantsq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\
+    \0\0\x02\a�xxsr\0\x1abudget.model.Entertainment����PԏK\x02\0\0xq\0~\0\x13t\0\x1c\
+    LEGO DUPLO Town Farm Animalssq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\
+    \0\x01uq\0~\0\v\0\0\0\x02\x03�xxsq\0~\0Mt\0\x06Cinemasq\0~\0\x04\0\0\0\x02sq\0\
+    ~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\x03ixxsq\0~\0Mt\0\fSkate rentalsq\0\
+    ~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\0\0\x02\v�xxsq\0\
+    ~\0\x13t\0\x1dSensodyne Pronamel Toothpastesq\0~\0\x04\0\0\0\x02sq\0~\0\b�����\
+    �����������\0\0\0\x01uq\0~\0\v\0\0\0\x02\a�xxsq\0~\0\x13t\0\x19Chick-fil-A $10\
+    \ Gift Cardsq\0~\0\x04\0\0\0\x02sq\0~\0\b����������������\0\0\0\x01uq\0~\0\v\0\
+    \0\0\x02\x03�xxsq\0~\0\x13t\0\x04Debtsq\0~\0\x04\0\0\0\x02sq\0~\0\b�����������\
+    �����\0\0\0\x01uq\0~\0\v\0\0\0\x02\x01^xxx"
+  learner_created: true
+- name: src/budget/BudgetManagerApplication.java
+  visible: true
+  text: |
+    package budget;
+
+    import budget.core.PurchaseFileManger;
+    import budget.domain.BudgetManager;
+    import budget.domain.ShoppingList;
+
+    import static budget.utils.BudgetManagerUtils.choiceAction;
+
+    public class BudgetManagerApplication implements Runnable {
+
+        private BudgetManager budgetManager;
+        private ShoppingList shoppingList = new ShoppingList();
+        private final PurchaseFileManger fileManger;
+
+        public BudgetManagerApplication(String filename) {
+            this.fileManger = new PurchaseFileManger(filename);
+            this.budgetManager = new BudgetManager(shoppingList);
+        }
+
+        @Override
+        public void run() {
+
+            String input;
+            while (true) {
+
+                input = choiceAction();
+
+                if (!input.matches("\\d")) {
+                    System.out.println("Action must be a number between 0 and 4!");
+                } else {
+                    int choice = Integer.parseInt(input);
+
+                    switch (choice) {
+                        case 1:
+                            budgetManager.addIncome();
+                            break;
+                        case 2:
+                            shoppingList.addPurchase();
+                            break;
+                        case 3:
+                            shoppingList.show();
+                            break;
+                        case 4:
+                            budgetManager.showBalance();
+                            break;
+                        case 5:
+                            save();
+                            break;
+                        case 6:
+                            load();
+                            break;
+                        case 0:
+                            System.out.println("\nBye!");
+                            return;
+                        default:
+                            // Implement me
+                    }
+                }
+            }
+        }
+
+        public void save() {
+            fileManger.save(budgetManager);
+            System.out.println("Purchases were saved!");
+        }
+
+        public void load() {
+            this.budgetManager = fileManger.load();
+            this.shoppingList = budgetManager.getShoppingList();
+            System.out.println("\nPurchases were loaded!\n");
+        }
+    }
+  learner_created: true
+- name: src/budget/domain/ShoppingListAction.java
+  visible: true
+  text: |
+    package budget.domain;
+
+    public interface ShoppingListAction {
+
+        void show();
+        void addPurchase();
+    }
+  learner_created: true
+- name: src/budget/model/Entertainment.java
+  visible: true
+  text: |
+    package budget.model;
+
+    import java.math.BigDecimal;
+
+    public class Entertainment extends Purchase {
+
+        public Entertainment(String name, BigDecimal price) {
+            super(name, price);
+        }
+    }
+  learner_created: true
+- name: src/budget/model/Food.java
+  visible: true
+  text: |
+    package budget.model;
+
+    import java.math.BigDecimal;
+
+    public class Food extends Purchase {
+
+        public Food(String name, BigDecimal price) {
+            super(name, price);
+        }
+    }
+  learner_created: true
+- name: src/budget/domain/BudgetManager.java
+  visible: true
+  text: |
+    package budget.domain;
+
+    import java.io.Serializable;
+    import java.math.BigDecimal;
+    import java.math.RoundingMode;
+    import java.util.Objects;
+
+    import static budget.utils.BudgetManagerUtils.requestInput;
+
+    public class BudgetManager implements Serializable {
+
+        private static final long serialVersionUID = 1222L;
+        private BigDecimal balance = BigDecimal.ZERO;
+        private final ShoppingList shoppingList;
+
+        public BudgetManager(ShoppingList shoppingList) {
+            this.shoppingList = shoppingList;
+        }
+
+        public ShoppingList getShoppingList() {
+            return shoppingList;
+        }
+
+        public void showBalance() {
+
+            BigDecimal tmp = balance
+                    .subtract(shoppingList.getTotalPrice())
+                    .setScale(2, RoundingMode.HALF_UP);
+
+            System.out.printf("\nBalance: $%s\n%n", tmp);
+        }
+
+        public void addIncome() {
+            String input = requestInput("\nEnter income");
+
+            if (!input.matches("\\d+")) {
+                return;
+            }
+
+            balance = new BigDecimal(input).setScale(2, RoundingMode.HALF_UP);
+
+            System.out.println("Income was added!\n");
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof BudgetManager)) return false;
+            BudgetManager that = (BudgetManager) o;
+            return Objects.equals(balance, that.balance) && Objects.equals(shoppingList, that.shoppingList);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(balance, shoppingList);
+        }
+
+        @Override
+        public String toString() {
+            return "BudgetManager{" +
+                    "balance=" + balance +
+                    ", shoppingList=" + shoppingList +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/budget/utils/PurchaseType.java
+  visible: true
+  text: |
+    package budget.utils;
+
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    public enum PurchaseType {
+
+        FOOD,
+        CLOTHES,
+        ENTERTAINMENT,
+        OTHER;
+
+        public static List<String> toList() {
+            return Arrays.stream(values())
+                    .map(PurchaseType::name)
+                    .map(PurchaseType::capitalize)
+                    .collect(Collectors.toList());
+        }
+
+        public String capitalize() {
+            return capitalize(this.name());
+        }
+
+        public static PurchaseType getPurchaseType(int ordinal) {
+            return Arrays.stream(values())
+                    .filter(purchaseType -> purchaseType.ordinal() == ordinal)
+                    .findFirst()
+                    .orElseThrow();
+        }
+
+        private static String capitalize(String purchaseType) {
+            return purchaseType.charAt(0) + purchaseType.substring(1).toLowerCase();
+        }
+    }
+  learner_created: true
+- name: src/budget/utils/BudgetManagerUtils.java
+  visible: true
+  text: |
+    package budget.utils;
+
+    import java.util.List;
+    import java.util.Scanner;
+    import java.util.stream.Collectors;
+    import java.util.stream.Stream;
+
+    public class BudgetManagerUtils {
+
+        public static final List<String> MENU_ITEMS = List.of("Add income", "Add purchase", "Show list of purchases",
+                "Balance", "Save", "Load", "Exit");
+
+        public static String requestInput(String command) {
+            System.out.printf("%s:\n", command);
+            return new Scanner(System.in).nextLine();
+        }
+
+        public static String choiceAction() {
+            displayMenuItems();
+            return new Scanner(System.in).nextLine();
+        }
+
+        private static void displayMenuItems() {
+            StringBuilder sb = new StringBuilder("Choice your action:\n");
+            MENU_ITEMS.stream()
+                    .map(BudgetManagerUtils::formatItem)
+                    .forEach(sb::append);
+
+            System.out.println(sb);
+        }
+
+        private static String formatItem(String item) {
+            return "Exit".equals(item) ? String.format("%s) %s", 0, item) : String.format("%s) %s\n", MENU_ITEMS.indexOf(item) + 1, item);
+        }
+
+        public static int choiceTypeOfPurchases() {
+            displayOptionsForPurchasesTypeChoice();
+            return new Scanner(System.in).nextInt();
+        }
+
+        private static void displayOptionsForPurchasesTypeChoice() {
+            StringBuilder sb = new StringBuilder("\nChoose the type of purchases");
+            List<String> options = Stream.concat(PurchaseType.toList().stream(), Stream.of("All", "Back")).collect(Collectors.toList());
+
+            formatOptions(options).forEach(sb::append);
+
+            System.out.println(sb);
+        }
+
+        private static Stream<String> formatOptions(List<String> options) {
+            return options.stream().map(option -> String.format("%n%s) %s", options.indexOf(option) + 1, option));
+        }
+
+
+        public static int choiceTypeOfPurchase() {
+            displayOptionOfPurchaseTypeChoice();
+            return new Scanner(System.in).nextInt();
+        }
+
+        private static void displayOptionOfPurchaseTypeChoice() {
+            StringBuilder sb = new StringBuilder("\nChoose the type of purchase");
+
+            List<String> options = Stream.concat(PurchaseType.toList().stream(), Stream.of("Back")).collect(Collectors.toList());
+
+            formatOptions(options).forEach(sb::append);
+
+            System.out.println(sb);
+        }
+    }
+  learner_created: true
+- name: src/budget/model/Clothes.java
+  visible: true
+  text: |
+    package budget.model;
+
+    import java.math.BigDecimal;
+
+    public class Clothes extends Purchase {
+
+        public Clothes(String name, BigDecimal price) {
+            super(name, price);
+        }
+    }
+  learner_created: true
+- name: src/budget/utils/PurchaseSerializer.java
+  visible: true
+  text: |
+    package budget.utils;
+
+    import budget.domain.BudgetManager;
+
+    import java.io.*;
+
+    public class PurchaseSerializer {
+
+        /**
+         * Serialize the given object to the file
+         */
+        public static void serialize(BudgetManager budgetManager, String fileName) throws IOException {
+            FileOutputStream fos = new FileOutputStream(fileName);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(budgetManager);
+            oos.close();
+        }
+
+        /**
+         * Deserialize to an object from the file
+         */
+        public static BudgetManager deserialize(String fileName) throws IOException, ClassNotFoundException {
+            FileInputStream fis = new FileInputStream(fileName);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            BudgetManager obj = (BudgetManager) ois.readObject();
+            ois.close();
+            return obj;
+        }
+    }
+  learner_created: true
+- name: src/budget/model/Purchase.java
+  visible: true
+  text: |
+    package budget.model;
+
+    import java.io.Serializable;
+    import java.math.BigDecimal;
+    import java.util.Objects;
+
+    public class Purchase implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        private final String name;
+        private final BigDecimal price;
+
+        public Purchase(String name, BigDecimal price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Purchase)) return false;
+            Purchase purchase = (Purchase) o;
+            return Objects.equals(getName(), purchase.getName()) && Objects.equals(getPrice(), purchase.getPrice());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getName(), getPrice());
+        }
+
+        @Override
+        public String toString() {
+            return "Purchase{" +
+                    "name='" + name + '\'' +
+                    ", price=" + price +
+                    '}';
+        }
+    }
+  learner_created: true
+- name: src/budget/core/PurchaseFileManger.java
+  visible: true
+  text: |
+    package budget.core;
+
+    import budget.domain.BudgetManager;
+    import budget.domain.ShoppingList;
+    import budget.utils.PurchaseSerializer;
+
+    import java.io.File;
+    import java.io.IOException;
+
+    public class PurchaseFileManger {
+
+        private final String filename;
+        private BudgetManager budgetManager;
+
+        public PurchaseFileManger(String filename) {
+            this.filename = filename;
+        }
+
+        public void save(BudgetManager budgetManager) {
+            try {
+                PurchaseSerializer.serialize(budgetManager, filename);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public BudgetManager load() {
+            File file = new File(filename);
+            if (file.exists()) {
+                try {
+                    budgetManager = PurchaseSerializer.deserialize(filename);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                budgetManager = new BudgetManager(new ShoppingList());
+            }
+
+            return budgetManager;
+        }
+    }
+  learner_created: true
+- name: src/budget/core/PurchaseAnalyzer.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/Viewer.java
+  visible: true
+  learner_created: true
+- name: src/budget/utils/SortOption.java
+  visible: true
+  learner_created: true
+- name: src/budget/utils/ShowOption.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/PurchaseFilter.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/sort/PurchaseSorter.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/sort/PurchaseSortContext.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/sort/PurchaseSortStrategy.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/sort/SortAlgorithm.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseViewer.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseViewerContext.java
+  visible: true
+  text: |
+    package budget.core;
+
+    import budget.model.Purchase;
+    import budget.utils.PurchaseType;
+
+    import java.math.BigDecimal;
+    import java.math.RoundingMode;
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    public class PurchaseViewerContext implements PurchaseViewStrategy {
+
+        private final List<Purchase> purchases;
+
+        public PurchaseViewerContext(List<Purchase> purchases) {
+            this.purchases = purchases;
+        }
+
+        @Override
+        public void viewAll() {
+            System.out.print("\nAll:");
+            show(purchases);
+        }
+
+        @Override
+        public void viewAllByType(PurchaseType type) {
+            try {
+                String name = type.capitalize();
+                System.out.printf("%n%s:", name);
+                List<Purchase> purchasesOfChoice = purchases.stream()
+                        .filter(purchase -> name.equals(purchase.getClass().getSimpleName()))
+                        .collect(Collectors.toList());
+
+                if (purchasesOfChoice.isEmpty()) {
+                    System.out.printf("%nThe purchase list is empty!\n");
+                    return;
+                }
+
+                show(purchasesOfChoice);
+            } catch (Exception e) {
+                System.out.println("Unknown purchase type");
+            }
+        }
+
+        private void show(List<Purchase> purchases) {
+
+            purchases.forEach(purchase -> System.out.printf("%n%s $%s", purchase.getName(), purchase.getPrice()));
+
+            System.out.printf("%nTotal sum: $%s\n", getTotalPrice(purchases));
+        }
+
+        public BigDecimal getTotalPrice(List<Purchase> purchases) {
+            return purchases.stream()
+                    .map(Purchase::getPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .setScale(2, RoundingMode.HALF_UP);
+        }
+    }
+  learner_created: true
+- name: src/budget/core/view/PurchaseViewStrategy.java
+  visible: true
+  text: |
+    package budget.core;
+
+    import budget.utils.PurchaseType;
+
+    public interface PurchaseViewStrategy {
+
+        void viewAll();
+        void viewAllByType(PurchaseType type);
+    }
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/7028#comment
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Fri, 27 Jan 2023 19:42:25 UTC
+record: -1

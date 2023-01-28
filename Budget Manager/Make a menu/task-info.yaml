@@ -1,0 +1,377 @@
+type: edu
+custom_name: stage2
+files:
+- name: src/budget/Main.java
+  visible: true
+  text: |
+    package budget;
+
+    public class Main {
+        public static void main(String[] args) {
+            // write your code here
+        }
+    }
+  learner_created: false
+- name: test/BudgetManagerTest.java
+  visible: false
+  text: |
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.function.BiFunction;
+    import java.util.regex.Matcher;
+    import java.util.regex.Pattern;
+
+    public class BudgetManagerTest extends StageTest<String> {
+
+        @Override
+        public List<TestCase<String>> generate() {
+            return List.of(
+
+                new TestCase<String>()
+                    .setInput("0\n")
+                    .setCheckFunc(BudgetManagerTest::test1),
+
+                new TestCase<String>()
+                    .setInput("0\n")
+                    .setCheckFunc(BudgetManagerTest::test2),
+
+                new TestCase<String>()
+                    .setInput("4\n0")
+                    .setCheckFunc(BudgetManagerTest::test3),
+
+                new TestCase<String>()
+                    .setInput("1\n400\n4\n1\n200\n4\n0")
+                    .setCheckFunc(BudgetManagerTest::test4),
+
+                new TestCase<String>()
+                    .setInput("3\n1\n600\n2\nRed Fuji Apple\n5.99\n2\nEggs\n3.99\n3\n4\n0")
+                    .setCheckFunc(BudgetManagerTest::test5)
+            );
+        }
+
+
+        //Checking program stop
+        private static CheckResult test1(String reply, String attach) {
+            if (!reply.contains("Bye!")) {
+                return new CheckResult(false,
+                    "Your program should stop after choosing \"Exit\"");
+            }
+            return new CheckResult(true);
+        }
+
+
+        //Checking menu
+        private static CheckResult test2(String reply, String attach) {
+            String[] menuPatterns = {"1)", "2)", "3)", "4)", "0)"};
+            for (String menuPattern : menuPatterns) {
+                if (!reply.contains(menuPattern)) {
+                    return new CheckResult(false,
+                        "Your menu doesn't have item " + menuPattern);
+                }
+            }
+            return new CheckResult(true);
+        }
+
+
+        //Checking balance
+        private static CheckResult test3(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 4) {
+                return new CheckResult(false,
+                    "Your program shows wrong blocks of output. Expected: 4\n" +
+                        "You have: " + blocks.length + "\n" +
+                        "Make sure that you print an empty line after each chosen action");
+            }
+
+            String balance = blocks[1];
+
+            if (!balance.toLowerCase().contains("balance")) {
+                return new CheckResult(false,
+                    "Your program should show balance after choosing 4th item");
+            }
+
+            Pattern doublePattern = Pattern.compile("\\d+[,.]\\d+");
+            Matcher matcher = doublePattern.matcher(balance);
+
+            if (!matcher.find()) {
+                return new CheckResult(false,
+                    "Your balance should contain a number!");
+            }
+
+            double balanceDouble = Double.parseDouble(matcher.group());
+
+            if (Math.abs(balanceDouble - 0) > 0.0001) {
+                System.out.println(balance);
+                return new CheckResult(false,
+                    "Balance should be $0.00 at the beginning");
+            }
+
+            return new CheckResult(true);
+        }
+
+
+        //Checking adding income
+        private static CheckResult test4(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 10) {
+                return new CheckResult(false,
+                    "Your program shows wrong blocks of output. Expected: 10\n" +
+                        "You have: " + blocks.length + "\n" +
+                        "Make sure that you print an empty line after each chosen action");
+            }
+
+            String balanceAfterFirstAddingIncome = blocks[3];
+
+            if (!balanceAfterFirstAddingIncome.contains("$400")) {
+                return new CheckResult(false,
+                    "Balance is wrong after adding income!.\n" +
+                        "Expected:\n" +
+                        "Balance: $400.00\n" +
+                        "Your output:\n" + balanceAfterFirstAddingIncome);
+            }
+
+            return new CheckResult(true);
+        }
+
+
+        //Checking adding purchase
+        private static CheckResult test5(String reply, String attach) {
+
+            String[] blocks = reply.split("\n(\n+)?\n");
+
+            if (blocks.length != 14) {
+                return new CheckResult(false,
+                    "Your program shows wrong blocks of output. Expected: 14\n" +
+                        "You have: " + blocks.length + "\n" +
+                        "Make sure that you print an empty line after each chosen action");
+            }
+
+            String emptyPurchaseList = blocks[1];
+
+            if (!emptyPurchaseList.contains("empty")) {
+                return new CheckResult(false,
+                    "Purchase list should be empty at the beginning!");
+            }
+
+            String purchaseList = blocks[9];
+
+            String[][] purchases = {
+                {"Red Fuji Apple", "5.99"},
+                {"Eggs", "3.99"}
+            };
+
+            for (String[] purchase : purchases) {
+                if (!purchaseList.contains(purchase[0])) {
+                    return new CheckResult(false,
+                        "Your purchase list doesn't contain \"" + purchase[0] + "\"");
+                }
+                if (!purchaseList.contains(purchase[1])) {
+                    return new CheckResult(false,
+                        "Your purchase list doesn't have price of " + purchase[0]);
+                }
+            }
+
+            String balanceAfterAddingPurchases = blocks[11];
+
+            Pattern doublePattern = Pattern.compile("\\d+[,.]\\d+");
+            Matcher matcher = doublePattern.matcher(balanceAfterAddingPurchases);
+
+            if (!matcher.find()) {
+                return new CheckResult(false,
+                    "Your balance should contain a number!");
+            }
+
+            double balance = Double.parseDouble(matcher.group());
+
+            if (Math.abs(balance - 590.02) > 0.0001) {
+                return new CheckResult(false,
+                    "Your balance should change after adding purchase.\n" +
+                        "Expected: Balance $590.02\n" +
+                        "Your output: " + balanceAfterAddingPurchases);
+            }
+
+            return new CheckResult(true);
+        }
+
+
+    }
+  learner_created: false
+- name: src/budget/domain/BudgetManager.java
+  visible: true
+  text: |
+    package budget.domain;
+
+    import budget.model.Purchase;
+
+    import java.math.BigDecimal;
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.Scanner;
+    import java.util.stream.Collectors;
+
+    public class BudgetManager implements Runnable {
+
+        private final List<Purchase> purchases = new ArrayList<>();
+
+        private BudgetManager() {
+        }
+
+        public static BudgetManager init() {
+            return new BudgetManager();
+        }
+
+        @Override
+        public void run() {
+            processPurchase();
+            purchases.forEach(System.out::println);
+            double totalPrice = purchases.stream()
+                    .map(Purchase::getPrice)
+                    .map(BigDecimal::new)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .doubleValue();
+
+            System.out.printf("\nTotal: $%s\n", totalPrice);
+        }
+
+        private void processPurchase() {
+            Scanner scanner = new Scanner(System.in);
+
+            while (scanner.hasNextLine()) {
+                String input = scanner.nextLine();
+                if (input == null) {
+                    return;
+                }
+
+                List<String> data = Arrays.stream(input.split("\\s+")).collect(Collectors.toList());
+                Purchase purchase = PurchaseBuilder.init()
+                        .withProduct(stringify(data.subList(0, data.size() - 1)))
+                        .withPrice(Double.parseDouble(data.get(data.size() - 1).replace("$", "")))
+                        .createPurchase();
+
+                purchases.add(purchase);
+            }
+        }
+
+        private String stringify(List<String> data) {
+            StringBuilder sb;
+            sb = new StringBuilder();
+            for (int i = 0; i < data.size(); i++) {
+                sb.append(data.get(i));
+                if (i < data.size() - 1) {
+                    sb.append(" ");
+                }
+            }
+
+            return sb.toString();
+        }
+    }
+  learner_created: true
+- name: src/budget/model/Purchase.java
+  visible: true
+  text: |
+    package budget.model;
+
+    import java.math.BigDecimal;
+    import java.math.RoundingMode;
+    import java.util.Objects;
+
+    public class Purchase {
+
+        private final String product;
+        private final double price;
+
+        public Purchase(String product, double price) {
+            this.product = product;
+            this.price = price;
+        }
+
+        public String getProduct() {
+            return product;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Purchase)) return false;
+            Purchase purchase = (Purchase) o;
+            return Double.compare(purchase.getPrice(), getPrice()) == 0 && Objects.equals(getProduct(), purchase.getProduct());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getProduct(), getPrice());
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s $%s", product, BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP));
+        }
+    }
+  learner_created: true
+- name: src/budget/domain/PurchaseBuilder.java
+  visible: true
+  text: |-
+    package budget.domain;
+
+    import budget.model.Purchase;
+
+    public class PurchaseBuilder {
+        private String product;
+        private double price;
+
+        private PurchaseBuilder() {
+        }
+
+        public static PurchaseBuilder init() {
+            return new PurchaseBuilder();
+        }
+
+        public PurchaseBuilder withProduct(String product) {
+            this.product = product;
+            return this;
+        }
+
+        public PurchaseBuilder withPrice(double price) {
+            this.price = price;
+            return this;
+        }
+
+        public Purchase createPurchase() {
+            return new Purchase(product, price);
+        }
+    }
+  learner_created: true
+- name: src/budget/menu/MenuOption.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/IncomeAddOption.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/Menu.java
+  visible: true
+  learner_created: true
+- name: src/budget/utils/BudgetManagerUtils.java
+  visible: true
+  learner_created: true
+- name: src/budget/domain/MenuOption.java
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/7025#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 25 Jan 2023 20:20:28 UTC
+record: 2

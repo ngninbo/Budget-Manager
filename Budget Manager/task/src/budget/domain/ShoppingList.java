@@ -16,13 +16,13 @@ import java.util.List;
 
 import static budget.utils.BudgetManagerUtils.*;
 
-public class ShoppingList implements Serializable {
+public class ShoppingList implements ShoppingListAction, Serializable {
 
     private static final long serialVersionUID = 11234L;
 
     private final List<Purchase> purchases = new ArrayList<>();
 
-    private BigDecimal budget = BigDecimal.ONE;
+    private BigDecimal budget = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
 
     public void showPurchases() {
         if (purchases.isEmpty()) {

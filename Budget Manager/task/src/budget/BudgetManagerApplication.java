@@ -16,13 +16,16 @@ public class BudgetManagerApplication implements Runnable {
 
     @Override
     public void run() {
+        process();
+    }
 
+    private void process() {
         while (true) {
 
             String input = choiceAction();
 
             if (!input.matches("\\d")) {
-                System.out.println("Action must be a number between 0 and 7!");
+                System.out.println("\nAction must be a number between 0 and 7!\n");
             } else {
                 int choice = Integer.parseInt(input);
                 String item = choice == 0 ? "Exit" : MENU_ITEMS.get(choice - 1);

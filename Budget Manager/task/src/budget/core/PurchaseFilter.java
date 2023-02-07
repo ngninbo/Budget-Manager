@@ -3,6 +3,7 @@ package budget.core;
 import budget.model.Purchase;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class PurchaseFilter {
@@ -15,12 +16,11 @@ public class PurchaseFilter {
 
     public List<Purchase> filterBy(String type) {
         return purchases.stream()
-                .filter(purchase -> isOther(type, purchase))
+                .filter(purchase -> filter().apply(type, purchase.getClass().getSimpleName()))
                 .collect(Collectors.toList());
     }
 
-    private boolean isOther(String type, Purchase purchase) {
-        final String simpleName = purchase.getClass().getSimpleName();
-        return "Other".equals(type) ? "Purchase".equals(simpleName) : type.equals(simpleName);
+    private BiFunction<String, String, Boolean> filter() {
+        return (type, simpleName) -> "Other".equals(type) ? "Purchase".equals(simpleName) : type.equals(simpleName);
     }
 }

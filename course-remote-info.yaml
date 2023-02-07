@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/247701/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Sun, 29 Jan 2023 11:36:04 UTC
+update_date: Mon, 06 Feb 2023 18:58:02 UTC
 stages:
 - id: 421
   step: 7024
@@ -104,10 +104,10 @@ topics:
     theory_id: 3621
   - title: Hierarchy of exceptions
     theory_id: 3570
-  - title: Processing strings
-    theory_id: 3551
   - title: What is a bug
     theory_id: 5504
+  - title: Processing strings
+    theory_id: 3551
   - title: Introduction to logging
     theory_id: 5538
   - title: Debugging techniques
@@ -157,7 +157,7 @@ topics:
     theory_id: 5357
   - title: IntelliJ IDEA
     theory_id: 3801
-  - title: IDEA Basics
+  - title: IntelliJ IDEA basics
     theory_id: 5819
   - title: EduTools
     theory_id: 5839

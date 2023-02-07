@@ -102,7 +102,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                 new PurchaseAnalyzer(new PurchaseViewer(new PurchaseViewerContext(purchases))).withSort(choice - 1).analyse();
 
             } catch (Exception e) {
-                System.out.println("Unknown sort strategy");
+                System.out.println("\nUnknown sort strategy");
             }
         }
     }

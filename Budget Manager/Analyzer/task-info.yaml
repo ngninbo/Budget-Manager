@@ -965,9 +965,6 @@ files:
 - name: src/budget/core/PurchaseAnalyzer.java
   visible: true
   learner_created: true
-- name: src/budget/core/Viewer.java
-  visible: true
-  learner_created: true
 - name: src/budget/utils/SortOption.java
   visible: true
   learner_created: true
@@ -977,22 +974,83 @@ files:
 - name: src/budget/core/PurchaseFilter.java
   visible: true
   learner_created: true
-- name: src/budget/core/sort/PurchaseSorter.java
-  visible: true
-  learner_created: true
-- name: src/budget/core/sort/PurchaseSortContext.java
-  visible: true
-  learner_created: true
 - name: src/budget/core/sort/PurchaseSortStrategy.java
   visible: true
   learner_created: true
 - name: src/budget/core/sort/SortAlgorithm.java
   visible: true
   learner_created: true
-- name: src/budget/core/view/PurchaseViewer.java
+- name: src/budget/core/PurchaseFileManager.java
+  visible: true
+  text: |
+    package budget.core;
+
+    import budget.domain.BudgetManager;
+    import budget.domain.ShoppingList;
+    import budget.utils.PurchaseSerializer;
+
+    import java.io.File;
+    import java.io.IOException;
+
+    public class PurchaseFileManger {
+
+        private final String filename;
+        private BudgetManager budgetManager;
+
+        public PurchaseFileManger(String filename) {
+            this.filename = filename;
+        }
+
+        public void save(BudgetManager budgetManager) {
+            try {
+                PurchaseSerializer.serialize(budgetManager, filename);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public BudgetManager load() {
+            File file = new File(filename);
+            if (file.exists()) {
+                try {
+                    budgetManager = PurchaseSerializer.deserialize(filename);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                budgetManager = new BudgetManager(new ShoppingList());
+            }
+
+            return budgetManager;
+        }
+    }
+  learner_created: true
+- name: src/budget/core/PurchaseBuilder.java
   visible: true
   learner_created: true
+- name: src/budget/core/FileManager.java
+  visible: true
+  learner_created: true
+- name: src/budget/domain/Menu.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseViewStrategy.java
+  visible: true
+  text: |
+    package budget.core;
+
+    import budget.utils.PurchaseType;
+
+    public interface PurchaseViewStrategy {
+
+        void viewAll();
+        void viewAllByType(PurchaseType type);
+    }
+  learner_created: true
 - name: src/budget/core/view/PurchaseViewerContext.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseViewer.java
   visible: true
   text: |
     package budget.core;
@@ -1054,71 +1112,13 @@ files:
         }
     }
   learner_created: true
-- name: src/budget/core/view/PurchaseViewStrategy.java
-  visible: true
-  text: |
-    package budget.core;
-
-    import budget.utils.PurchaseType;
-
-    public interface PurchaseViewStrategy {
-
-        void viewAll();
-        void viewAllByType(PurchaseType type);
-    }
-  learner_created: true
-- name: src/budget/core/PurchaseFileManager.java
-  visible: true
-  text: |
-    package budget.core;
-
-    import budget.domain.BudgetManager;
-    import budget.domain.ShoppingList;
-    import budget.utils.PurchaseSerializer;
-
-    import java.io.File;
-    import java.io.IOException;
-
-    public class PurchaseFileManger {
-
-        private final String filename;
-        private BudgetManager budgetManager;
-
-        public PurchaseFileManger(String filename) {
-            this.filename = filename;
-        }
-
-        public void save(BudgetManager budgetManager) {
-            try {
-                PurchaseSerializer.serialize(budgetManager, filename);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public BudgetManager load() {
-            File file = new File(filename);
-            if (file.exists()) {
-                try {
-                    budgetManager = PurchaseSerializer.deserialize(filename);
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                budgetManager = new BudgetManager(new ShoppingList());
-            }
-
-            return budgetManager;
-        }
-    }
-  learner_created: true
-- name: src/budget/core/PurchaseBuilder.java
+- name: src/budget/core/sort/PurchaseSortContext.java
   visible: true
   learner_created: true
-- name: src/budget/core/FileManager.java
+- name: src/budget/core/sort/PurchaseSorter.java
   visible: true
   learner_created: true
-- name: src/budget/domain/Menu.java
+- name: src/budget/domain/PurchaseCollector.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment

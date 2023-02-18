@@ -1,39 +1,60 @@
 package budget.core.view;
 
-
 import budget.model.Purchase;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
-public class PurchaseViewer {
+public class PurchaseViewer implements PurchaseViewStrategy {
 
-    private PurchaseViewStrategy viewStrategy;
+    private final List<Purchase> purchases;
 
-    public PurchaseViewer(PurchaseViewStrategy viewStrategy) {
-        this.viewStrategy = viewStrategy;
+    public PurchaseViewer(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 
-    public void setViewStrategy(PurchaseViewStrategy viewStrategy) {
-        this.viewStrategy = viewStrategy;
-    }
-
+    @Override
     public void viewAll() {
-        viewStrategy.viewAll();
+        System.out.print("\nAll:");
+        show();
     }
 
+    @Override
     public void viewAllByType(String type) {
-        viewStrategy.viewAllByType(type);
+        try {
+            System.out.printf("%n%s:", type);
+
+            show();
+            showTotalPrices("Total sum");
+        } catch (Exception e) {
+            System.out.println("Unknown purchase type");
+        }
     }
 
+    @Override
     public void showTotalPrices(String label) {
-        viewStrategy.showTotalPrices(label);
+        System.out.printf("%n%s: $%s\n", label, getTotalPrice());
     }
 
+    @Override
     public void show() {
-        viewStrategy.show();
+        if (purchases.isEmpty()) {
+            System.out.printf("%nThe purchase list is empty!\n");
+            return;
+        }
+        purchases.forEach(purchase -> System.out.printf("%n%s $%s", purchase.getName(), purchase.getPrice()));
     }
 
-    public List<Purchase> getPurchases() {
-        return viewStrategy.getItems();
+    @Override
+    public List<Purchase> getItems() {
+        return purchases;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return purchases.stream()
+                .map(Purchase::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 }

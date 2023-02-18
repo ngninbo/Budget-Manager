@@ -1,8 +1,8 @@
 package budget.domain;
 
 import budget.core.*;
-import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
+import budget.core.view.PurchaseViewer;
 import budget.model.Purchase;
 import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
@@ -36,20 +36,20 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
                 ShowOption option = ShowOption.getOption(choice - 1);
 
-                PurchaseViewer viewer = new PurchaseViewer(new PurchaseViewerContext(purchases));
+                PurchaseViewerContext purchaseViewerContext = new PurchaseViewerContext(new PurchaseViewer(purchases));
 
                 switch (option) {
                     case BACK:
                         System.out.println();
                         return;
                     case ALL:
-                        viewer.viewAll();
-                        viewer.showTotalPrices("Total sum");
+                        purchaseViewerContext.viewAll();
+                        purchaseViewerContext.showTotalPrices("Total sum");
                         break;
                     default:
                         final String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(option.ordinal()).name());
-                        viewer.setViewStrategy(new PurchaseViewerContext(new PurchaseFilter(purchases).filterBy(type)));
-                        viewer.viewAllByType(type);
+                        purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseFilter(purchases).filterBy(type)));
+                        purchaseViewerContext.viewAllByType(type);
                         break;
                 }
             } catch (Exception e) {
@@ -99,7 +99,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                     return;
                 }
 
-                new PurchaseAnalyzer(new PurchaseViewer(new PurchaseViewerContext(purchases))).withSort(choice - 1).analyse();
+                new PurchaseAnalyzer(new PurchaseViewerContext(new PurchaseViewer(purchases))).withSort(choice - 1).analyse();
 
             } catch (Exception e) {
                 System.out.println("\nUnknown sort strategy");

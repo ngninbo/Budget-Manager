@@ -1,6 +1,7 @@
 package budget.core.view;
 
 
+import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 
 import java.util.List;
@@ -35,5 +36,13 @@ public class PurchaseViewerContext {
 
     public List<Purchase> getPurchases() {
         return viewStrategy.getItems();
+    }
+
+    public boolean hasEmptyList() {
+        return viewStrategy.getItems().isEmpty();
+    }
+
+    public PurchaseCollector getCollector() {
+        return viewStrategy.getCollector();
     }
 }

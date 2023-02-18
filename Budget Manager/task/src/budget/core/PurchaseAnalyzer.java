@@ -4,6 +4,7 @@ import budget.core.sort.PurchaseSorter;
 import budget.core.sort.PurchaseSortContext;
 import budget.core.view.PurchaseViewerContext;
 import budget.core.view.PurchaseViewer;
+import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
@@ -15,14 +16,12 @@ import static budget.utils.BudgetManagerUtils.choicePurchaseType;
 
 public class PurchaseAnalyzer {
 
-    private final List<Purchase> purchases;
     private SortOption option;
 
     private final PurchaseViewerContext viewerContext;
 
     public PurchaseAnalyzer(PurchaseViewerContext viewerContext) {
         this.viewerContext = viewerContext;
-        this.purchases = viewerContext.getPurchases();
     }
 
     public PurchaseAnalyzer withSort(int choice) {
@@ -34,12 +33,12 @@ public class PurchaseAnalyzer {
 
         switch (option) {
             case SORT_BY_TYPE:
-                if (purchases.isEmpty()) {
+                if (viewerContext.hasEmptyList()) {
                     System.out.println("\nList is empty");
                     return;
                 }
 
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseSortContext(new PurchaseSorter(purchases)).sortByType()));
+                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType())));
                 viewerContext.show();
                 System.out.println();
                 break;
@@ -48,22 +47,22 @@ public class PurchaseAnalyzer {
                 int choice = choicePurchaseType();
 
                 String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(choice - 1).name());
-                final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(this.purchases)).sortByType(type);
+                final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
 
                 if (purchases.isEmpty()) {
                     System.out.printf("%nThe purchase list is empty!\n");
                     return;
                 }
 
-                viewerContext.setViewStrategy(new PurchaseViewer(purchases));
+                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
                 viewerContext.viewAllByType(type);
                 break;
             case SORT_ALL_PURCHASES:
-                if (this.purchases.isEmpty()) {
+                if (viewerContext.hasEmptyList()) {
                     System.out.println("\nPurchase list is empty");
                     return;
                 }
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseSortContext(new PurchaseSorter(this.purchases)).sortAll()));
+                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortAll())));
                 viewerContext.viewAll();
                 viewerContext.showTotalPrices("Total");
                 break;

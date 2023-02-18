@@ -11,8 +11,6 @@ import budget.utils.ShowOption;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
 import static budget.utils.BudgetManagerUtils.*;
 
@@ -20,12 +18,12 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
     private static final long serialVersionUID = 11234L;
 
-    private final List<Purchase> purchases = new ArrayList<>();
+    private final PurchaseCollector purchaseCollector = new PurchaseCollector();
 
     private BigDecimal budget = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
 
     public void showPurchases() {
-        if (purchases.isEmpty()) {
+        if (purchaseCollector.isEmpty()) {
             System.out.printf("%nThe purchase list is empty!\n%n");
             return;
         }
@@ -36,7 +34,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
                 ShowOption option = ShowOption.getOption(choice - 1);
 
-                PurchaseViewerContext purchaseViewerContext = new PurchaseViewerContext(new PurchaseViewer(purchases));
+                PurchaseViewerContext purchaseViewerContext = new PurchaseViewerContext(new PurchaseViewer(purchaseCollector));
 
                 switch (option) {
                     case BACK:
@@ -48,7 +46,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                         break;
                     default:
                         final String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(option.ordinal()).name());
-                        purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseFilter(purchases).filterBy(type)));
+                        purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseFilter(purchaseCollector.getItems()).filterBy(type))));
                         purchaseViewerContext.viewAllByType(type);
                         break;
                 }
@@ -79,7 +77,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                         .withType(purchaseType)
                         .withName(name).withPrice(price).build();
 
-                purchases.add(purchase);
+                purchaseCollector.add(purchase);
                 budget = budget.subtract(purchase.getPrice()).setScale(2, RoundingMode.HALF_UP);
                 System.out.println("Purchase was added!");
             } catch (Exception e) {
@@ -99,7 +97,7 @@ public class ShoppingList implements ShoppingListAction, Serializable {
                     return;
                 }
 
-                new PurchaseAnalyzer(new PurchaseViewerContext(new PurchaseViewer(purchases))).withSort(choice - 1).analyse();
+                new PurchaseAnalyzer(new PurchaseViewerContext(new PurchaseViewer(purchaseCollector))).withSort(choice - 1).analyse();
 
             } catch (Exception e) {
                 System.out.println("\nUnknown sort strategy");

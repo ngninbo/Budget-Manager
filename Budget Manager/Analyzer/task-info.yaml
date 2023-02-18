@@ -977,9 +977,6 @@ files:
 - name: src/budget/core/sort/PurchaseSortStrategy.java
   visible: true
   learner_created: true
-- name: src/budget/core/sort/SortAlgorithm.java
-  visible: true
-  learner_created: true
 - name: src/budget/core/PurchaseFileManager.java
   visible: true
   text: |
@@ -1119,6 +1116,9 @@ files:
   visible: true
   learner_created: true
 - name: src/budget/domain/PurchaseCollector.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/sort/SortUtils.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment

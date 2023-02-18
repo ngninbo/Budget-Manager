@@ -1,5 +1,6 @@
 package budget.core.view;
 
+import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface PurchaseViewStrategy {
     void show();
 
     List<Purchase> getItems();
+
+    PurchaseCollector getCollector();
 }

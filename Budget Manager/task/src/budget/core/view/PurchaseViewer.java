@@ -1,17 +1,16 @@
 package budget.core.view;
 
+import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 public class PurchaseViewer implements PurchaseViewStrategy {
 
-    private final List<Purchase> purchases;
+    private final PurchaseCollector purchaseCollector;
 
-    public PurchaseViewer(List<Purchase> purchases) {
-        this.purchases = purchases;
+    public PurchaseViewer(PurchaseCollector purchaseCollector) {
+        this.purchaseCollector = purchaseCollector;
     }
 
     @Override
@@ -34,27 +33,25 @@ public class PurchaseViewer implements PurchaseViewStrategy {
 
     @Override
     public void showTotalPrices(String label) {
-        System.out.printf("%n%s: $%s\n", label, getTotalPrice());
+        System.out.printf("%n%s: $%s\n", label, purchaseCollector.getTotalPrice());
     }
 
     @Override
     public void show() {
-        if (purchases.isEmpty()) {
+        if (purchaseCollector.isEmpty()) {
             System.out.printf("%nThe purchase list is empty!\n");
             return;
         }
-        purchases.forEach(purchase -> System.out.printf("%n%s $%s", purchase.getName(), purchase.getPrice()));
+        purchaseCollector.show();
     }
 
     @Override
     public List<Purchase> getItems() {
-        return purchases;
+        return purchaseCollector.getItems();
     }
 
-    public BigDecimal getTotalPrice() {
-        return purchases.stream()
-                .map(Purchase::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .setScale(2, RoundingMode.HALF_UP);
+    @Override
+    public PurchaseCollector getCollector() {
+        return purchaseCollector;
     }
 }

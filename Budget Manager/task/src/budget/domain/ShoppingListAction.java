@@ -1,10 +1,12 @@
 package budget.domain;
 
+import budget.model.Purchase;
+
+import java.math.BigDecimal;
+
 public interface ShoppingListAction {
 
-    void showPurchases();
-    void addPurchase();
-    void analyse();
-    void showBalance();
-    void addIncome();
+    void addIncome(BigDecimal income);
+
+    void addPurchase(Purchase purchase);
 }

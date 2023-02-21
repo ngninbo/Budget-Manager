@@ -42,7 +42,7 @@ public class PurchaseViewer implements PurchaseViewStrategy {
             System.out.printf("%nThe purchase list is empty!\n");
             return;
         }
-        purchaseCollector.show();
+        System.out.print(purchaseCollector);
     }
 
     @Override

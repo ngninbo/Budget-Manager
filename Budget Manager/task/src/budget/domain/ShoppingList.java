@@ -69,16 +69,11 @@ public class ShoppingList implements ShoppingListAction, Serializable {
 
                 final PurchaseType purchaseType = PurchaseType.getPurchaseType(choice - 1);
                 String name = requestInput("\nEnter purchase name");
-                BigDecimal price = new BigDecimal(requestInput("Enter its price")
-                        .replace("$", ""))
-                        .setScale(2, RoundingMode.HALF_UP);
+                BigDecimal price = toBigDecimal(requestInput("Enter its price"));
 
-                Purchase purchase = PurchaseBuilder.init()
-                        .withType(purchaseType)
-                        .withName(name).withPrice(price).build();
+                Purchase purchase = PurchaseFactory.getPurchase(purchaseType, name, price);
 
-                purchaseCollector.add(purchase);
-                budget = budget.subtract(purchase.getPrice()).setScale(2, RoundingMode.HALF_UP);
+                addPurchase(purchase);
                 System.out.println("Purchase was added!");
             } catch (Exception e) {
                 System.out.println("Unknown purchase type");
@@ -117,8 +112,21 @@ public class ShoppingList implements ShoppingListAction, Serializable {
             return;
         }
 
-        budget = budget.add(new BigDecimal(input).setScale(2, RoundingMode.HALF_UP));
+        addIncome(toBigDecimal(input));
 
         System.out.println("Income was added!\n");
+    }
+
+    public void addIncome(BigDecimal income) {
+        budget = budget.add(income);
+    }
+
+    public void addPurchase(Purchase purchase) {
+        purchaseCollector.add(purchase);
+        addIncome(purchase.getPrice().negate());
+    }
+
+    private BigDecimal toBigDecimal(String input) {
+        return new BigDecimal(input.replace("$", "")).setScale(2, RoundingMode.HALF_UP);
     }
 }

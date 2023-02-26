@@ -18,7 +18,12 @@ public enum PurchaseType {
      * @return {@link PurchaseType} Purchase type corresponding to given index/ordinal
      */
     public static PurchaseType get(int ordinal) {
-        return values()[ordinal];
+
+        if (ordinal >= 0 && ordinal < values().length) {
+            return values()[ordinal];
+        } else {
+            throw new IllegalArgumentException(String.format("Option by index = %s doesn't exist", ordinal));
+        }
     }
 
     /**

@@ -16,60 +16,67 @@ import static budget.utils.BudgetManagerUtils.choose;
 
 public class PurchaseAnalyzer {
 
-    private SortOption option;
-
     private final PurchaseViewerContext viewerContext;
 
     public PurchaseAnalyzer(PurchaseViewerContext viewerContext) {
         this.viewerContext = viewerContext;
     }
 
-    public PurchaseAnalyzer withSort(int choice) {
-        this.option = SortOption.get(choice);
-        return this;
-    }
-
-    public void analyse() {
-
+    public void sort(SortOption option) {
         switch (option) {
             case SORT_BY_TYPE:
-                if (viewerContext.hasEmptyList()) {
-                    System.out.println("\nList is empty");
-                    return;
-                }
-
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType())));
-                viewerContext.show();
-                System.out.println();
+                sortByType();
                 break;
             case SORT_CERTAIN_TYPE:
-
-                String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE);
-                if (!input.matches("[1-4]")) {
-                    System.out.println("\nPlease enter a number between 1 and 4");
-                } else {
-                    String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
-                    final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
-
-                    if (purchases.isEmpty()) {
-                        System.out.printf("%nThe purchase list is empty!\n");
-                        return;
-                    }
-
-                    viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
-                    viewerContext.viewAllByType(type);
-                }
+                sortByCertainType();
                 break;
             case SORT_ALL_PURCHASES:
-                if (viewerContext.hasEmptyList()) {
-                    System.out.println("\nPurchase list is empty");
-                    return;
-                }
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortAll())));
-                viewerContext.viewAll();
-                viewerContext.showTotalPrices("Total");
+                sortAll();
                 break;
             default:
+                throw new IllegalArgumentException("Invalid sort type provided");
+        }
+    }
+
+    private void sortByType() {
+        if (viewerContext.hasEmptyList()) {
+            System.out.println("\nList is empty");
+            return;
+        }
+
+        viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType())));
+        viewerContext.show();
+        System.out.println();
+    }
+
+    private void sortAll() {
+        if (viewerContext.hasEmptyList()) {
+            System.out.println("\nPurchase list is empty");
+            return;
+        }
+        viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortAll())));
+        viewerContext.viewAll();
+        viewerContext.showTotalPrices("Total");
+    }
+
+    private void sortByCertainType() {
+        final List<String> options = PurchaseType.toList();
+        final int index = options.size() - 1;
+        options.set(index, options.get(index).concat("\n"));
+        String input = choose(options, PURCHASE_TYPE_CHOICE_MESSAGE);
+        if (!input.matches("[1-4]")) {
+            System.out.println("\nPlease enter a number between 1 and 4");
+        } else {
+            String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
+            final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
+
+            if (purchases.isEmpty()) {
+                System.out.printf("%nThe purchase list is empty!\n");
+                return;
+            }
+
+            viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
+            viewerContext.viewAllByType(type);
         }
     }
 }

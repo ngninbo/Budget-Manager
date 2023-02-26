@@ -2,9 +2,8 @@ package budget;
 
 import budget.domain.BudgetManager;
 import budget.domain.Menu;
+import budget.utils.BudgetManagerUtils;
 import budget.utils.MenuItem;
-
-import static budget.utils.BudgetManagerUtils.choiceAction;
 
 public class BudgetManagerApplication implements Runnable {
 
@@ -22,7 +21,7 @@ public class BudgetManagerApplication implements Runnable {
     private void process() {
         while (true) {
 
-            String input = choiceAction();
+            String input = BudgetManagerUtils.choose(MenuItem.toList(), "Choose your action:");
 
             if (!input.matches("[0-7]")) {
                 System.out.println("\nAction must be a number between 0 and 7!\n");

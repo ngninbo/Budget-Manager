@@ -6,20 +6,12 @@ import java.util.Scanner;
 
 public class BudgetManagerUtils {
 
-    public static final String BACK = "Back";
+    public static final String BACK = "Back\n";
     public static final String ALL = "All";
-    public static final String PURCHASE_TYPE_CHOICE_MESSAGE = "Choose the type of purchase";
+    public static final String PURCHASE_TYPE_CHOICE_MESSAGE = "\nChoose the type of purchase";
 
-    public static String requestInput(String command) {
+    public static String enter(String command) {
         System.out.printf("%s:\n", command);
-        return new Scanner(System.in).nextLine();
-    }
-
-    public static String choiceAction() {
-        System.out.println("Choose your action:");
-        MenuItem
-                .toList()
-                .forEach(System.out::print);
         return new Scanner(System.in).nextLine();
     }
 
@@ -27,7 +19,7 @@ public class BudgetManagerUtils {
      * Display options inclusive additional ones and request user to choose one of them
      * @param options {@link List} List of options to be displayed
      * @param message {@link String} Message to be displayed
-     * @param additionalOptions {@link String[]} additional options - optional
+     * @param additionalOptions Array of {@link String} - additional options - optional
      * @return {@link String} Index of option choose by the user
      */
     public static String choose(List<String> options, String message, String... additionalOptions) {
@@ -45,6 +37,6 @@ public class BudgetManagerUtils {
 
         items.forEach(sb::append);
 
-        System.out.printf("%n%s%n", sb);
+        System.out.printf("%s", sb);
     }
 }

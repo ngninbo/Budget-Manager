@@ -59,9 +59,9 @@ public enum MenuItem {
         switch (this) {
             case INCOME:
             case PURCHASE:
-                return "%s) Add %s\n";
+                return "%n%s) Add %s";
             case SHOW:
-                return "%s) %s list of purchases\n";
+                return "%n%s) %s list of purchases\n";
             case SORT:
                 return "%s) Analyse (%s)\n";
             default:

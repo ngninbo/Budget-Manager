@@ -16,7 +16,12 @@ public enum SortOption {
      * @return {@link SortOption} Sort option
      */
     public static SortOption get(int ordinal) {
-        return values()[ordinal];
+
+        if (ordinal >= 0 && ordinal < values().length) {
+            return values()[ordinal];
+        } else {
+            throw new IllegalArgumentException(String.format("Option by index = %s doesn't exist", ordinal));
+        }
     }
 
     /**

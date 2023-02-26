@@ -35,7 +35,7 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void addIncome() {
 
-        String input = requestInput("\nEnter income");
+        String input = enter("\nEnter income");
 
         if (!input.matches("\\d+")) {
             System.out.println();
@@ -49,7 +49,7 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void analyse() {
         while (true) {
-            String input = choose(SortOption.toList(), "How do you want to sort?", BACK);
+            String input = choose(SortOption.toList(), "\nHow do you want to sort?", BACK);
 
             if (!input.matches("[1-4]")) {
                 System.out.println("\nPlease enter a number between 1 and 4");
@@ -58,8 +58,7 @@ public class BudgetManager implements Menu, Serializable {
                 return;
             } else {
                 new PurchaseAnalyzer(new PurchaseViewerContext(new PurchaseViewer(shoppingList.getPurchaseCollector())))
-                        .withSort(Integer.parseInt(input) - 1)
-                        .analyse();
+                        .sort(SortOption.get(Integer.parseInt(input) - 1));
             }
         }
     }
@@ -78,7 +77,7 @@ public class BudgetManager implements Menu, Serializable {
     public void addPurchase() {
 
         while (true) {
-            String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);;
+            String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);
 
             if (!input.matches("[1-5]")) {
                 System.out.println("\nPlease enter a number between 1 and 5!\n");
@@ -102,7 +101,7 @@ public class BudgetManager implements Menu, Serializable {
         }
 
         while (true) {
-            String input = choose(PurchaseType.toList(), "Choose the type of purchases", ALL, BACK);
+            String input = choose(PurchaseType.toList(), "\nChoose the type of purchases", ALL, BACK);
 
             if (!input.matches("[1-6]")) {
                 System.out.println("Please enter a number between 1 and 6.");
@@ -137,8 +136,8 @@ public class BudgetManager implements Menu, Serializable {
     }
 
     private void addPurchase(PurchaseType type) {
-        String name = requestInput("\nEnter purchase name");
-        BigDecimal price = toBigDecimal(requestInput("Enter its price"));
+        String name = enter("\nEnter purchase name");
+        BigDecimal price = toBigDecimal(enter("Enter its price"));
 
         Purchase purchase = PurchaseFactory.getPurchase(type, name, price);
 

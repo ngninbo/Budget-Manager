@@ -2,7 +2,6 @@ package budget.domain;
 
 import budget.core.PurchaseFilter;
 import budget.model.Purchase;
-import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
 
 import java.io.Serializable;
@@ -34,11 +33,15 @@ public class PurchaseCollector implements Serializable {
         return purchases;
     }
 
-    public Map<String, BigDecimal> toMap() {
+    /**
+     * Find which category eats the most money.
+     * @return {@link Map} category-amount pair - sorted by category.
+     */
+    public Map<String, BigDecimal> sum() {
         Map<String, BigDecimal> map = new HashMap<>();
 
         for (PurchaseType purchaseType : PurchaseType.values()) {
-            String type = BudgetManagerUtils.capitalize(purchaseType.name());
+            String type = purchaseType.capitalize();
             List<Purchase> tmp = new PurchaseFilter(purchases).filterBy(type);
             BigDecimal sum = tmp.stream()
                     .map(Purchase::getPrice)

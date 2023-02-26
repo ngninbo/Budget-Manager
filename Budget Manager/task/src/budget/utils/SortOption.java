@@ -6,30 +6,29 @@ import java.util.stream.Collectors;
 
 public enum SortOption {
 
-    SORT_ALL_PURCHASES ("Sort all purchases"),
-    SORT_BY_TYPE ("Sort by type"),
-    SORT_CERTAIN_TYPE ("Sort certain type");
+    SORT_ALL_PURCHASES,
+    SORT_BY_TYPE,
+    SORT_CERTAIN_TYPE;
 
-    private final String description;
-
-    SortOption(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public static SortOption getOptionBy(int ordinal) {
-        return Arrays.stream(values())
-                .filter(sortOption -> ordinal == sortOption.ordinal())
-                .findFirst()
-                .orElseThrow();
+    public static SortOption get(int ordinal) {
+        return values()[ordinal];
     }
 
     public static List<String> toList() {
         return Arrays.stream(values())
-                .map(SortOption::getDescription)
+                .map(SortOption::capitalize)
                 .collect(Collectors.toList());
+    }
+
+    public String replaceUnderscores() {
+        return name().replace("_", " ");
+    }
+
+    public String capitalize() {
+        return capitalize(replaceUnderscores());
+    }
+
+    private static String capitalize(String name) {
+        return name.charAt(0) + name.substring(1).toLowerCase();
     }
 }

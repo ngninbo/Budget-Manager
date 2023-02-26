@@ -30,6 +30,6 @@ public class PurchaseSorter implements PurchaseSortStrategy {
 
     @Override
     public List<Purchase> sortByType() {
-        return SortUtils.sort(purchaseCollector.toMap());
+        return SortUtils.sort(purchaseCollector.sum());
     }
 }

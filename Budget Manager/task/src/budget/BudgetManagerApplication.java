@@ -2,8 +2,8 @@ package budget;
 
 import budget.domain.BudgetManager;
 import budget.domain.Menu;
+import budget.utils.MenuItem;
 
-import static budget.utils.BudgetManagerUtils.MENU_ITEMS;
 import static budget.utils.BudgetManagerUtils.choiceAction;
 
 public class BudgetManagerApplication implements Runnable {
@@ -24,35 +24,35 @@ public class BudgetManagerApplication implements Runnable {
 
             String input = choiceAction();
 
-            if (!input.matches("\\d")) {
+            if (!input.matches("[0-7]")) {
                 System.out.println("\nAction must be a number between 0 and 7!\n");
             } else {
                 int choice = Integer.parseInt(input);
-                String item = choice == 0 ? "Exit" : MENU_ITEMS.get(choice - 1);
+                MenuItem item = MenuItem.get(choice - 1);
 
                 switch (item) {
-                    case "Add income":
+                    case INCOME:
                         menu.addIncome();
                         break;
-                    case "Add purchase":
+                    case PURCHASE:
                         menu.addPurchase();
                         break;
-                    case "Show list of purchases":
+                    case SHOW:
                         menu.showPurchases();
                         break;
-                    case "Balance":
+                    case BALANCE:
                         menu.showBalance();
                         break;
-                    case "Save":
+                    case SAVE:
                         menu.save();
                         break;
-                    case "Load":
+                    case LOAD:
                         this.menu.load();
                         break;
-                    case "Analyze (Sort)":
+                    case SORT:
                         menu.analyse();
                         break;
-                    case "Exit":
+                    case EXIT:
                         menu.exit();
                         return;
                     default:

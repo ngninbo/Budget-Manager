@@ -2,13 +2,11 @@ package budget.utils;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BudgetManagerUtils {
 
-    public static final List<String> MENU_ITEMS = List.of("Add income", "Add purchase", "Show list of purchases",
-            "Balance", "Save", "Load", "Analyze (Sort)", "Exit");
+    public static final String BACK = "Back";
 
     public static String requestInput(String command) {
         System.out.printf("%s:\n", command);
@@ -16,31 +14,23 @@ public class BudgetManagerUtils {
     }
 
     public static String choiceAction() {
-        StringBuilder sb = new StringBuilder("Choose your action:\n");
-        MENU_ITEMS.stream()
-                .map(BudgetManagerUtils::formatItem)
-                .forEach(sb::append);
-
-        System.out.println(sb);
+        System.out.println("Choose your action:");
+        MenuItem
+                .toList()
+                .forEach(System.out::print);
         return new Scanner(System.in).nextLine();
     }
 
-    public static int choiceSort() {
-        List<String> options = Stream.concat(SortOption.toList().stream(), Stream.of("Back")).collect(Collectors.toList());
-        displayMenu(options, "How do you want to sort?");
-        return new Scanner(System.in).nextInt();
+    public static String chooseSortType() {
+        return choose(SortOption.toList(), "How do you want to sort?");
     }
 
-
-    public static int choiceTypeOfPurchases() {
-        displayMenu(ShowOption.toList(), "Choose the type of purchases");
-        return new Scanner(System.in).nextInt();
+    public static String chooseTypeOfPurchases() {
+        return choose(PurchaseType.toShowList(), "Choose the type of purchases");
     }
 
-    public static int choiceTypeOfPurchase() {
-        List<String> options = Stream.concat(PurchaseType.toList().stream(), Stream.of("Back")).collect(Collectors.toList());
-        displayMenu(options, "Choose the type of purchase");
-        return new Scanner(System.in).nextInt();
+    public static String chooseTypeOfPurchase() {
+        return choose(PurchaseType.toList(), "Choose the type of purchase");
     }
 
     public static int choicePurchaseType() {
@@ -60,11 +50,9 @@ public class BudgetManagerUtils {
         return options.stream().map(option -> String.format("%n%s) %s", options.indexOf(option) + 1, option));
     }
 
-    private static String formatItem(String item) {
-        return "Exit".equals(item) ? String.format("%s) %s", 0, item) : String.format("%s) %s\n", MENU_ITEMS.indexOf(item) + 1, item);
-    }
-
-    public static String capitalize(String purchaseType) {
-        return purchaseType.charAt(0) + purchaseType.substring(1).toLowerCase();
+    private static String choose(List<String> options, String message) {
+        options.add(BACK);
+        displayMenu(options, message);
+        return new Scanner(System.in).nextLine();
     }
 }

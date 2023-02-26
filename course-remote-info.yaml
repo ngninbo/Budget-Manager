@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/247701/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Tue, 21 Feb 2023 18:59:29 UTC
+update_date: Sun, 26 Feb 2023 10:34:47 UTC
 stages:
 - id: 421
   step: 7024
@@ -211,12 +211,12 @@ topics:
     theory_id: 3499
   - title: Introduction to Operating systems
     theory_id: 9704
-  - title: Exception handling
-    theory_id: 3552
   - title: Command line overview
     theory_id: 8977
   - title: Parameters and Options
     theory_id: 9746
+  - title: Exception handling
+    theory_id: 3552
   - title: Running programs on your computer
     theory_id: 3746
   - title: Files

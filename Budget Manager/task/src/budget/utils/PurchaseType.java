@@ -11,17 +11,23 @@ public enum PurchaseType {
     ENTERTAINMENT,
     OTHER;
 
+    public static PurchaseType get(int ordinal) {
+        return values()[ordinal];
+    }
+
     public static List<String> toList() {
-        return Arrays.stream(values())
-                .map(PurchaseType::name)
-                .map(BudgetManagerUtils::capitalize)
+        return Arrays.stream(PurchaseType.values())
+                .map(PurchaseType::capitalize)
                 .collect(Collectors.toList());
     }
 
-    public static PurchaseType getPurchaseType(int ordinal) {
-        return Arrays.stream(values())
-                .filter(purchaseType -> purchaseType.ordinal() == ordinal)
-                .findFirst()
-                .orElseThrow();
+    public static List<String> toShowList() {
+        List<String> options = toList();
+        options.add("All");
+        return options;
+    }
+
+    public String capitalize() {
+        return name().charAt(0) + name().substring(1).toLowerCase();
     }
 }

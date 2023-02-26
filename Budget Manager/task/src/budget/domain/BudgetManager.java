@@ -7,9 +7,7 @@ import budget.core.PurchaseFilter;
 import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
 import budget.model.Purchase;
-import budget.utils.BudgetManagerUtils;
 import budget.utils.PurchaseType;
-import budget.utils.ShowOption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -50,20 +48,17 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void analyse() {
         while (true) {
-            try {
-                int choice = choiceSort();
+            String input = chooseSortType();
 
-                if (choice == 4) {
-                    System.out.printf("%n");
-                    return;
-                }
-
+            if (!input.matches("[1-4]")) {
+                System.out.println("\nPlease enter a number between 1 and 4");
+            } else if ("4".equals(input)) {
+                System.out.println();
+                return;
+            } else {
                 new PurchaseAnalyzer(new PurchaseViewerContext(new PurchaseViewer(shoppingList.getPurchaseCollector())))
-                        .withSort(choice - 1)
+                        .withSort(Integer.parseInt(input) - 1)
                         .analyse();
-
-            } catch (Exception e) {
-                System.out.println("\nUnknown sort strategy");
             }
         }
     }
@@ -82,24 +77,17 @@ public class BudgetManager implements Menu, Serializable {
     public void addPurchase() {
 
         while (true) {
-            try {
-                int choice = choiceTypeOfPurchase();
-                final int back = 5;
-                if (choice == back) {
-                    System.out.println();
-                    return;
-                }
+            String input = chooseTypeOfPurchase();
 
-                final PurchaseType purchaseType = PurchaseType.getPurchaseType(choice - 1);
-                String name = requestInput("\nEnter purchase name");
-                BigDecimal price = toBigDecimal(requestInput("Enter its price"));
-
-                Purchase purchase = PurchaseFactory.getPurchase(purchaseType, name, price);
-
-                shoppingList.addPurchase(purchase);
-                System.out.println("Purchase was added!");
-            } catch (Exception e) {
-                System.out.println("Unknown purchase type");
+            if (!input.matches("[1-5]")) {
+                System.out.println("\nPlease enter a number between 1 and 5!\n");
+            } else if ("5".equals(input)){
+                System.out.println();
+                return;
+            } else {
+                int choice = Integer.parseInt(input);
+                final PurchaseType purchaseType = PurchaseType.get(choice - 1);
+                addPurchase(purchaseType);
             }
         }
     }
@@ -113,37 +101,48 @@ public class BudgetManager implements Menu, Serializable {
         }
 
         while (true) {
-            try {
-                int choice = choiceTypeOfPurchases();
+            String input = chooseTypeOfPurchases();
 
-                ShowOption option = ShowOption.getOption(choice - 1);
-
-                PurchaseViewerContext purchaseViewerContext = new PurchaseViewerContext(new PurchaseViewer(shoppingList.getPurchaseCollector()));
-
-                switch (option) {
-                    case BACK:
-                        System.out.println();
-                        return;
-                    case ALL:
-                        purchaseViewerContext.viewAll();
-                        purchaseViewerContext.showTotalPrices("Total sum");
-                        break;
-                    default:
-                        final String type = BudgetManagerUtils.capitalize(PurchaseType.getPurchaseType(option.ordinal()).name());
-                        purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(
-                                new PurchaseFilter(shoppingList.getPurchaseCollector().getItems()).filterBy(type))));
-                        purchaseViewerContext.viewAllByType(type);
-                        break;
-                }
-            } catch (Exception e) {
-                System.out.println("Unknown purchase type");
+            if (!input.matches("[1-6]")) {
+                System.out.println("Please enter a number between 1 and 6.");
+            } else if ("6".equals(input)) {
+                System.out.println();
+                return;
+            } else {
+                process(input);
             }
+        }
+    }
+
+    private void process(String input) {
+        int choice = Integer.parseInt(input);
+        PurchaseViewerContext purchaseViewerContext = new PurchaseViewerContext(new PurchaseViewer(shoppingList.getPurchaseCollector()));
+
+        final int length = PurchaseType.values().length;
+        if (choice <= length) {
+            final String type = PurchaseType.get(choice - 1).capitalize();
+            purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(
+                    new PurchaseFilter(shoppingList.getPurchaseCollector().getItems()).filterBy(type))));
+            purchaseViewerContext.viewAllByType(type);
+        } else {
+            purchaseViewerContext.viewAll();
+            purchaseViewerContext.showTotalPrices("Total sum");
         }
     }
 
     @Override
     public void exit() {
         System.out.println("\nBye!");
+    }
+
+    private void addPurchase(PurchaseType type) {
+        String name = requestInput("\nEnter purchase name");
+        BigDecimal price = toBigDecimal(requestInput("Enter its price"));
+
+        Purchase purchase = PurchaseFactory.getPurchase(type, name, price);
+
+        shoppingList.addPurchase(purchase);
+        System.out.println("Purchase was added!");
     }
 
     private BigDecimal toBigDecimal(String input) {

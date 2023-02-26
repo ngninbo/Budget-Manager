@@ -1,9 +1,6 @@
 package budget.core.view;
 
 import budget.domain.PurchaseCollector;
-import budget.model.Purchase;
-
-import java.util.List;
 
 public class PurchaseViewer implements PurchaseViewStrategy {
 
@@ -21,14 +18,9 @@ public class PurchaseViewer implements PurchaseViewStrategy {
 
     @Override
     public void viewAllByType(String type) {
-        try {
-            System.out.printf("%n%s:", type);
-
-            show();
-            showTotalPrices("Total sum");
-        } catch (Exception e) {
-            System.out.println("Unknown purchase type");
-        }
+        System.out.printf("%n%s:", type);
+        show();
+        showTotalPrices("Total sum");
     }
 
     @Override
@@ -43,11 +35,6 @@ public class PurchaseViewer implements PurchaseViewStrategy {
             return;
         }
         System.out.print(purchaseCollector);
-    }
-
-    @Override
-    public List<Purchase> getItems() {
-        return purchaseCollector.getItems();
     }
 
     @Override

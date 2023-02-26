@@ -23,7 +23,7 @@ public class PurchaseSorter implements PurchaseSortStrategy {
 
     @Override
     public List<Purchase> sortByCertainType(String type) {
-        List<Purchase> purchases = new PurchaseFilter(purchaseCollector.getItems()).filterBy(type);
+        List<Purchase> purchases = PurchaseFilter.filter(purchaseCollector.getItems(), type);
         SortUtils.sort(purchases);
         return purchases;
     }

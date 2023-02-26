@@ -10,25 +10,28 @@ public enum SortOption {
     SORT_BY_TYPE,
     SORT_CERTAIN_TYPE;
 
+    /**
+     * Get purchase type by given index/ordinal.
+     * @param ordinal {@link Integer} index/ordinal of option to look for
+     * @return {@link SortOption} Sort option
+     */
     public static SortOption get(int ordinal) {
         return values()[ordinal];
     }
 
+    /**
+     * Get list from this enums values.
+     * It replaces all underscores with whitespaces and capitalize elements.
+     * @return {@link List} List of sort options
+     */
     public static List<String> toList() {
         return Arrays.stream(values())
-                .map(SortOption::capitalize)
+                .map(SortOption::replaceUnderscores)
+                .map(StringCapitalize::capitalize)
                 .collect(Collectors.toList());
     }
 
     public String replaceUnderscores() {
         return name().replace("_", " ");
-    }
-
-    public String capitalize() {
-        return capitalize(replaceUnderscores());
-    }
-
-    private static String capitalize(String name) {
-        return name.charAt(0) + name.substring(1).toLowerCase();
     }
 }

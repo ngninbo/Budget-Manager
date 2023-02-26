@@ -42,7 +42,7 @@ public class PurchaseCollector implements Serializable {
 
         for (PurchaseType purchaseType : PurchaseType.values()) {
             String type = purchaseType.capitalize();
-            List<Purchase> tmp = new PurchaseFilter(purchases).filterBy(type);
+            List<Purchase> tmp = PurchaseFilter.filter(purchases, type);
             BigDecimal sum = tmp.stream()
                     .map(Purchase::getPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);

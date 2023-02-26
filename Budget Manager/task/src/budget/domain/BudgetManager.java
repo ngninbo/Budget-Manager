@@ -121,8 +121,8 @@ public class BudgetManager implements Menu, Serializable {
         final int length = PurchaseType.values().length;
         if (choice <= length) {
             final String type = PurchaseType.get(choice - 1).capitalize();
-            purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(
-                    new PurchaseFilter(shoppingList.getPurchaseCollector().getItems()).filterBy(type))));
+            purchaseViewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(PurchaseFilter
+                    .filter(shoppingList.getPurchaseCollector().getItems(), type))));
             purchaseViewerContext.viewAllByType(type);
         } else {
             purchaseViewerContext.viewAll();

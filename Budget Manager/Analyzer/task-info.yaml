@@ -1118,13 +1118,10 @@ files:
 - name: src/budget/core/sort/SortUtils.java
   visible: true
   learner_created: true
-- name: src/budget/core/Filter.java
-  visible: true
-  learner_created: true
-- name: src/budget/utils/PurchaseTypeChoiceItem.java
-  visible: true
-  learner_created: true
 - name: src/budget/utils/MenuItem.java
+  visible: true
+  learner_created: true
+- name: src/budget/utils/StringCapitalize.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment

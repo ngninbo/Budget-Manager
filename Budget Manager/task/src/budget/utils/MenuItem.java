@@ -15,6 +15,12 @@ public enum MenuItem {
     SORT,
     EXIT;
 
+    /**
+     * Get item by given index/ordinal.
+     * Throws {@link IllegalArgumentException} when item by given index doesn't exist
+     * @param index {@link Integer} index or ordinal of item to search for
+     * @return {@link MenuItem} Menu item corresponding to given index/ordinal
+     */
     public static MenuItem get(int index) {
 
         if (index == -1) {
@@ -27,11 +33,7 @@ public enum MenuItem {
     }
 
     public String capitalize() {
-        return capitalize(name());
-    }
-
-    private static String capitalize(String name) {
-        return name.charAt(0) + name.substring(1).toLowerCase();
+        return StringCapitalize.capitalize(name());
     }
 
     public static List<String> toList() {
@@ -40,6 +42,10 @@ public enum MenuItem {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Format given menu item before displaying it in the selection menu
+     * @return {@link String} Formatted menu item ready for display
+     */
     private String format() {
 
         switch (this) {

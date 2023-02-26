@@ -8,6 +8,7 @@ import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
 import budget.model.Purchase;
 import budget.utils.PurchaseType;
+import budget.utils.SortOption;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -48,7 +49,7 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void analyse() {
         while (true) {
-            String input = chooseSortType();
+            String input = choose(SortOption.toList(), "How do you want to sort?", BACK);
 
             if (!input.matches("[1-4]")) {
                 System.out.println("\nPlease enter a number between 1 and 4");
@@ -77,7 +78,7 @@ public class BudgetManager implements Menu, Serializable {
     public void addPurchase() {
 
         while (true) {
-            String input = chooseTypeOfPurchase();
+            String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);;
 
             if (!input.matches("[1-5]")) {
                 System.out.println("\nPlease enter a number between 1 and 5!\n");
@@ -101,7 +102,7 @@ public class BudgetManager implements Menu, Serializable {
         }
 
         while (true) {
-            String input = chooseTypeOfPurchases();
+            String input = choose(PurchaseType.toList(), "Choose the type of purchases", ALL, BACK);
 
             if (!input.matches("[1-6]")) {
                 System.out.println("Please enter a number between 1 and 6.");

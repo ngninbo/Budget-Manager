@@ -64,9 +64,9 @@ public class PurchaseCollector implements Serializable {
         return purchases.isEmpty();
     }
 
-    public String toString() {
+    public String format(String delimiter) {
         StringBuilder sb = new StringBuilder();
-        purchases.forEach(purchase -> sb.append(String.format("%n%s $%s", purchase.getName(), purchase.getPrice())));
+        purchases.forEach(purchase -> sb.append(String.format("%n%s%s$%s", purchase.getName(), delimiter, purchase.getPrice())));
         return sb.toString();
     }
 }

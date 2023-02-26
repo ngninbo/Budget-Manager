@@ -27,18 +27,8 @@ public enum PurchaseType {
      */
     public static List<String> toList() {
         return Arrays.stream(PurchaseType.values())
-                .map(PurchaseType::capitalize)
+                .map(PurchaseType::format)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Same as {@link #toList()} with difference that item <i>Back</i> is added to the list
-     * @return {@link List} - Extended list from {@link #toList()}
-     */
-    public static List<String> toShowList() {
-        List<String> options = toList();
-        options.add("All");
-        return options;
     }
 
     /**
@@ -48,5 +38,9 @@ public enum PurchaseType {
      */
     public String capitalize() {
         return StringCapitalize.capitalize(name());
+    }
+
+    public String format() {
+        return String.format("%n%s) %s", ordinal() + 1, capitalize());
     }
 }

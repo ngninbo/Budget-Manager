@@ -1,12 +1,14 @@
 package budget.utils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class BudgetManagerUtils {
 
     public static final String BACK = "Back";
+    public static final String ALL = "All";
+    public static final String PURCHASE_TYPE_CHOICE_MESSAGE = "Choose the type of purchase";
 
     public static String requestInput(String command) {
         System.out.printf("%s:\n", command);
@@ -21,38 +23,28 @@ public class BudgetManagerUtils {
         return new Scanner(System.in).nextLine();
     }
 
-    public static String chooseSortType() {
-        return choose(SortOption.toList(), "How do you want to sort?");
-    }
+    /**
+     * Display options inclusive additional ones and request user to choose one of them
+     * @param options {@link List} List of options to be displayed
+     * @param message {@link String} Message to be displayed
+     * @param additionalOptions {@link String[]} additional options - optional
+     * @return {@link String} Index of option choose by the user
+     */
+    public static String choose(List<String> options, String message, String... additionalOptions) {
 
-    public static String chooseTypeOfPurchases() {
-        return choose(PurchaseType.toShowList(), "Choose the type of purchases");
-    }
+        if (additionalOptions.length > 0) {
+            Arrays.stream(additionalOptions).forEach(s -> options.add(String.format("\n%s) %s", options.size() + 1, s)));
+        }
 
-    public static String chooseTypeOfPurchase() {
-        return choose(PurchaseType.toList(), "Choose the type of purchase");
-    }
-
-    public static int choicePurchaseType() {
-        displayMenu(PurchaseType.toList(), "Choose the type of purchase");
-        return new Scanner(System.in).nextInt();
+        displayMenu(options, message);
+        return new Scanner(System.in).nextLine();
     }
 
     private static void displayMenu(List<String> items, String message) {
         StringBuilder sb = new StringBuilder(message);
 
-        formatOptions(items).forEach(sb::append);
+        items.forEach(sb::append);
 
         System.out.printf("%n%s%n", sb);
-    }
-
-    private static Stream<String> formatOptions(List<String> options) {
-        return options.stream().map(option -> String.format("%n%s) %s", options.indexOf(option) + 1, option));
-    }
-
-    private static String choose(List<String> options, String message) {
-        options.add(BACK);
-        displayMenu(options, message);
-        return new Scanner(System.in).nextLine();
     }
 }

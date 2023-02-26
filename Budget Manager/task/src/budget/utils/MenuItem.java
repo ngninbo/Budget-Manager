@@ -48,18 +48,38 @@ public enum MenuItem {
      */
     private String format() {
 
+        final int idx = getIndex();
+        final String name = getName();
+        String format = getFormat();
+
+        return String.format(format, idx, name);
+    }
+
+    private String getFormat() {
         switch (this) {
             case INCOME:
             case PURCHASE:
-                return String.format("%s) Add %s\n", ordinal() + 1, name().toLowerCase());
+                return "%s) Add %s\n";
             case SHOW:
-                return String.format("%s) %s list of purchases\n", ordinal() + 1, capitalize());
+                return "%s) %s list of purchases\n";
             case SORT:
-                return String.format("%s) Analyse (%s)\n", ordinal() + 1, capitalize());
-            case EXIT:
-               return String.format("%s) %s\n", 0, capitalize());
+                return "%s) Analyse (%s)\n";
             default:
-                return String.format("%s) %s\n", ordinal() + 1, capitalize());
+                return "%s) %s\n";
+        }
+    }
+
+    private int getIndex() {
+        return (ordinal() + 1) % values().length;
+    }
+
+    private String getName() {
+        switch (this) {
+            case INCOME:
+            case PURCHASE:
+                return name().toLowerCase();
+            default:
+                return capitalize();
         }
     }
 }

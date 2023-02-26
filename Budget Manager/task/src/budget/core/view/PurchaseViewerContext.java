@@ -28,7 +28,7 @@ public class PurchaseViewerContext {
     }
 
     public void show() {
-        viewStrategy.show();
+        viewStrategy.show(" - ");
     }
 
     public boolean hasEmptyList() {

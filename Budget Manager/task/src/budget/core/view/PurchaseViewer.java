@@ -13,13 +13,13 @@ public class PurchaseViewer implements PurchaseViewStrategy {
     @Override
     public void viewAll() {
         System.out.print("\nAll:");
-        show();
+        show(" ");
     }
 
     @Override
     public void viewAllByType(String type) {
         System.out.printf("%n%s:", type);
-        show();
+        show(" ");
         showTotalPrices("Total sum");
     }
 
@@ -29,12 +29,12 @@ public class PurchaseViewer implements PurchaseViewStrategy {
     }
 
     @Override
-    public void show() {
+    public void show(String delimiter) {
         if (purchaseCollector.isEmpty()) {
             System.out.printf("%nThe purchase list is empty!\n");
             return;
         }
-        System.out.print(purchaseCollector);
+        System.out.print(purchaseCollector.format(delimiter));
     }
 
     @Override

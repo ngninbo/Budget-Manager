@@ -11,7 +11,8 @@ import budget.utils.SortOption;
 
 import java.util.List;
 
-import static budget.utils.BudgetManagerUtils.choicePurchaseType;
+import static budget.utils.BudgetManagerUtils.PURCHASE_TYPE_CHOICE_MESSAGE;
+import static budget.utils.BudgetManagerUtils.choose;
 
 public class PurchaseAnalyzer {
 
@@ -43,18 +44,21 @@ public class PurchaseAnalyzer {
                 break;
             case SORT_CERTAIN_TYPE:
 
-                int choice = choicePurchaseType();
+                String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE);
+                if (!input.matches("[1-4]")) {
+                    System.out.println("\nPlease enter a number between 1 and 4");
+                } else {
+                    String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
+                    final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
 
-                String type = PurchaseType.get(choice - 1).capitalize();
-                final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
+                    if (purchases.isEmpty()) {
+                        System.out.printf("%nThe purchase list is empty!\n");
+                        return;
+                    }
 
-                if (purchases.isEmpty()) {
-                    System.out.printf("%nThe purchase list is empty!\n");
-                    return;
+                    viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
+                    viewerContext.viewAllByType(type);
                 }
-
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
-                viewerContext.viewAllByType(type);
                 break;
             case SORT_ALL_PURCHASES:
                 if (viewerContext.hasEmptyList()) {

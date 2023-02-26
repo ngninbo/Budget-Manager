@@ -26,12 +26,15 @@ public enum SortOption {
      */
     public static List<String> toList() {
         return Arrays.stream(values())
-                .map(SortOption::replaceUnderscores)
-                .map(StringCapitalize::capitalize)
+                .map(SortOption::format)
                 .collect(Collectors.toList());
     }
 
     public String replaceUnderscores() {
         return name().replace("_", " ");
+    }
+
+    public String format() {
+        return String.format("%n%s) %s", ordinal() + 1, StringCapitalize.capitalize(replaceUnderscores()));
     }
 }

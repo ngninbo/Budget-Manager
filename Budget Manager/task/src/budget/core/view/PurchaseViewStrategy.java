@@ -7,7 +7,7 @@ public interface PurchaseViewStrategy {
     void viewAll();
     void viewAllByType(String type);
     void showTotalPrices(String label);
-    void show();
+    void show(String delimiter);
 
     PurchaseCollector getCollector();
 }

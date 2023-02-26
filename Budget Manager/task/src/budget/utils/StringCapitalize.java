@@ -8,6 +8,6 @@ public class StringCapitalize {
      * @return {@link String} capitalized string
      */
     public static String capitalize(String word) {
-        return word.charAt(0) + word.substring(1).toLowerCase();
+        return String.join("", word.substring(0, 1), word.substring(1).toLowerCase());
     }
 }

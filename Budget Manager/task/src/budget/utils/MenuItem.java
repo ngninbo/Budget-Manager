@@ -17,9 +17,9 @@ public enum MenuItem {
 
     /**
      * Get item by given index/ordinal.
-     * Throws {@link IllegalArgumentException} when item by given index doesn't exist
      * @param index {@link Integer} index or ordinal of item to search for
      * @return {@link MenuItem} Menu item corresponding to given index/ordinal
+     * @throws IllegalArgumentException when item by given index doesn't exist
      */
     public static MenuItem get(int index) {
 
@@ -32,8 +32,12 @@ public enum MenuItem {
         }
     }
 
+    public static int size() {
+        return values().length;
+    }
+
     public String capitalize() {
-        return StringCapitalize.capitalize(name());
+        return StringUtils.capitalize(name());
     }
 
     public static List<String> toList() {

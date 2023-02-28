@@ -1,6 +1,9 @@
 package budget.core.view;
 
 import budget.domain.PurchaseCollector;
+import budget.utils.StringUtils;
+
+import static budget.utils.BudgetManagerUtils.*;
 
 public class PurchaseViewer implements PurchaseViewStrategy {
 
@@ -12,7 +15,7 @@ public class PurchaseViewer implements PurchaseViewStrategy {
 
     @Override
     public void viewAll() {
-        System.out.print("\nAll:");
+        System.out.print("\n".concat(StringUtils.capitalize(ALL)).concat(":"));
         show(" ");
     }
 
@@ -20,7 +23,7 @@ public class PurchaseViewer implements PurchaseViewStrategy {
     public void viewAllByType(String type) {
         System.out.printf("%n%s:", type);
         show(" ");
-        showTotalPrices("Total sum");
+        showTotalPrices(TOTAL.concat(" sum"));
     }
 
     @Override
@@ -31,7 +34,7 @@ public class PurchaseViewer implements PurchaseViewStrategy {
     @Override
     public void show(String delimiter) {
         if (purchaseCollector.isEmpty()) {
-            System.out.printf("%nThe purchase list is empty!\n");
+            System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY)));
             return;
         }
         System.out.print(purchaseCollector.format(delimiter));

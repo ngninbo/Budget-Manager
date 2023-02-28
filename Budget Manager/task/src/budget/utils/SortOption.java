@@ -35,11 +35,15 @@ public enum SortOption {
                 .collect(Collectors.toList());
     }
 
+    public static int size() {
+        return values().length;
+    }
+
     public String replaceUnderscores() {
         return name().replace("_", " ");
     }
 
     public String format() {
-        return String.format("%n%s) %s", ordinal() + 1, StringCapitalize.capitalize(replaceUnderscores()));
+        return String.format("%n%s) %s", ordinal() + 1, StringUtils.capitalize(replaceUnderscores()));
     }
 }

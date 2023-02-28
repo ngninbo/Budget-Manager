@@ -36,13 +36,17 @@ public enum PurchaseType {
                 .collect(Collectors.toList());
     }
 
+    public static int size() {
+        return values().length;
+    }
+
     /**
      * Capitalize name of this purchase type.
-     * See {@link StringCapitalize#capitalize(String)} for more details
+     * See {@link StringUtils#capitalize(String)} for more details
      * @return {@link String} Capitalized name of this purchase type
      */
     public String capitalize() {
-        return StringCapitalize.capitalize(name());
+        return StringUtils.capitalize(name());
     }
 
     public String format() {

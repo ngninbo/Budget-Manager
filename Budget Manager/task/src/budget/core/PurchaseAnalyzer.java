@@ -8,11 +8,11 @@ import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 import budget.utils.PurchaseType;
 import budget.utils.SortOption;
+import budget.utils.StringUtils;
 
 import java.util.List;
 
-import static budget.utils.BudgetManagerUtils.PURCHASE_TYPE_CHOICE_MESSAGE;
-import static budget.utils.BudgetManagerUtils.choose;
+import static budget.utils.BudgetManagerUtils.*;
 
 public class PurchaseAnalyzer {
 
@@ -40,7 +40,7 @@ public class PurchaseAnalyzer {
 
     private void sortByType() {
         if (viewerContext.hasEmptyList()) {
-            System.out.println("\nList is empty");
+            System.out.println("\n".concat(StringUtils.capitalize(LIST_IS_EMPTY)));
             return;
         }
 
@@ -51,12 +51,12 @@ public class PurchaseAnalyzer {
 
     private void sortAll() {
         if (viewerContext.hasEmptyList()) {
-            System.out.println("\nPurchase list is empty");
+            System.out.println("\n".concat(StringUtils.capitalize(PURCHASE.concat(" ".concat(LIST_IS_EMPTY)))));
             return;
         }
         viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortAll())));
         viewerContext.viewAll();
-        viewerContext.showTotalPrices("Total");
+        viewerContext.showTotalPrices(TOTAL);
     }
 
     private void sortByCertainType() {
@@ -65,13 +65,13 @@ public class PurchaseAnalyzer {
         options.set(index, options.get(index).concat("\n"));
         String input = choose(options, PURCHASE_TYPE_CHOICE_MESSAGE);
         if (!input.matches("[1-4]")) {
-            System.out.println("\nPlease enter a number between 1 and 4");
+            System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, PurchaseType.size());
         } else {
             String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
             final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
 
             if (purchases.isEmpty()) {
-                System.out.printf("%nThe purchase list is empty!\n");
+                System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY).concat("!")));
                 return;
             }
 

@@ -52,7 +52,7 @@ public class BudgetManager implements Menu, Serializable {
             String input = choose(SortOption.toList(), "\nHow do you want to sort?", BACK);
 
             if (!input.matches("[1-4]")) {
-                System.out.println("\nPlease enter a number between 1 and 4");
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, SortOption.size() + 1);
             } else if ("4".equals(input)) {
                 System.out.println();
                 return;
@@ -80,7 +80,7 @@ public class BudgetManager implements Menu, Serializable {
             String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);
 
             if (!input.matches("[1-5]")) {
-                System.out.println("\nPlease enter a number between 1 and 5!\n");
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, PurchaseType.size() + 1);
             } else if ("5".equals(input)){
                 System.out.println();
                 return;
@@ -96,16 +96,16 @@ public class BudgetManager implements Menu, Serializable {
     public void showPurchases() {
 
         if (shoppingList.isEmpty()) {
-            System.out.printf("%nThe purchase list is empty!\n%n");
+            System.out.println("\n".concat(THE.concat(" ").concat(PURCHASE.concat(" ").concat(LIST_IS_EMPTY.concat("!\n")))));
             return;
         }
 
         while (true) {
-            String input = choose(PurchaseType.toList(), "\nChoose the type of purchases", ALL, BACK);
-
+            String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE.concat("s"), ALL, BACK);
+            final int numberOfItems = PurchaseType.size() + 2;
             if (!input.matches("[1-6]")) {
-                System.out.println("Please enter a number between 1 and 6.");
-            } else if ("6".equals(input)) {
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, numberOfItems);
+            } else if (String.valueOf(numberOfItems).equals(input)) {
                 System.out.println();
                 return;
             } else {
@@ -126,7 +126,7 @@ public class BudgetManager implements Menu, Serializable {
             purchaseViewerContext.viewAllByType(type);
         } else {
             purchaseViewerContext.viewAll();
-            purchaseViewerContext.showTotalPrices("Total sum");
+            purchaseViewerContext.showTotalPrices(TOTAL.concat(" sum"));
         }
     }
 

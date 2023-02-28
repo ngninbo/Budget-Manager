@@ -1,6 +1,6 @@
 package budget.utils;
 
-public class StringCapitalize {
+public class StringUtils {
 
     /**
      * Capitalize given string
@@ -8,6 +8,6 @@ public class StringCapitalize {
      * @return {@link String} capitalized string
      */
     public static String capitalize(String word) {
-        return String.join("", word.substring(0, 1), word.substring(1).toLowerCase());
+        return String.join("", word.substring(0, 1).toUpperCase(), word.substring(1).toLowerCase());
     }
 }

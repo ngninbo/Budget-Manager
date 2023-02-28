@@ -35,14 +35,14 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void addIncome() {
 
-        String input = enter("\nEnter income");
+        String income = enterIncome();
 
-        if (!input.matches("\\d+")) {
+        if (!income.matches("\\d+")) {
             System.out.println();
             return;
         }
 
-        shoppingList.addIncome(toBigDecimal(input));
+        shoppingList.addIncome(toBigDecimal(income));
         System.out.println("Income was added!\n");
     }
 
@@ -50,10 +50,11 @@ public class BudgetManager implements Menu, Serializable {
     public void analyse() {
         while (true) {
             String input = choose(SortOption.toList(), "\nHow do you want to sort?", BACK);
+            final int numberOfOptions = SortOption.size() + 1;
 
             if (!input.matches("[1-4]")) {
-                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, SortOption.size() + 1);
-            } else if ("4".equals(input)) {
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, numberOfOptions);
+            } else if (String.valueOf(numberOfOptions).equals(input)) {
                 System.out.println();
                 return;
             } else {
@@ -78,10 +79,10 @@ public class BudgetManager implements Menu, Serializable {
 
         while (true) {
             String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);
-
+            final int optionSize = PurchaseType.size() + 1;
             if (!input.matches("[1-5]")) {
-                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, PurchaseType.size() + 1);
-            } else if ("5".equals(input)){
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, optionSize);
+            } else if (String.valueOf(optionSize).equals(input)){
                 System.out.println();
                 return;
             } else {
@@ -101,7 +102,7 @@ public class BudgetManager implements Menu, Serializable {
         }
 
         while (true) {
-            String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE.concat("s"), ALL, BACK);
+            String input = chooseTypeOfPurchases();
             final int numberOfItems = PurchaseType.size() + 2;
             if (!input.matches("[1-6]")) {
                 System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, numberOfItems);
@@ -136,9 +137,8 @@ public class BudgetManager implements Menu, Serializable {
     }
 
     private void addPurchase(PurchaseType type) {
-        String name = enter("\nEnter purchase name");
-        BigDecimal price = toBigDecimal(enter("Enter its price"));
-
+        String name = enterPurchaseName();
+        BigDecimal price = toBigDecimal(enterPrice());
         Purchase purchase = PurchaseFactory.getPurchase(type, name, price);
 
         shoppingList.addPurchase(purchase);

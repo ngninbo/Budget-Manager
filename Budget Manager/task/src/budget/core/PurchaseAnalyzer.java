@@ -60,10 +60,7 @@ public class PurchaseAnalyzer {
     }
 
     private void sortByCertainType() {
-        final List<String> options = PurchaseType.toList();
-        final int index = options.size() - 1;
-        options.set(index, options.get(index).concat("\n"));
-        String input = choose(options, PURCHASE_TYPE_CHOICE_MESSAGE);
+        String input = chooseTypeOfPurchase();
         if (!input.matches("[1-4]")) {
             System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, PurchaseType.size());
         } else {

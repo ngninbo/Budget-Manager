@@ -21,6 +21,18 @@ public class BudgetManagerUtils {
         return new Scanner(System.in).nextLine();
     }
 
+    public static String enterIncome() {
+        return enter("\nEnter income");
+    }
+
+    public static String enterPurchaseName() {
+        return enter("\nEnter purchase name");
+    }
+
+    public static String enterPrice() {
+        return enter("Enter its price");
+    }
+
     /**
      * Display options inclusive additional ones and request user to choose one of them
      * @param options {@link List} List of options to be displayed
@@ -36,6 +48,21 @@ public class BudgetManagerUtils {
 
         displayMenu(options, message);
         return new Scanner(System.in).nextLine();
+    }
+
+    public static String chooseTypeOfPurchase() {
+        final List<String> options = PurchaseType.toList();
+        final int index = options.size() - 1;
+        options.set(index, options.get(index).concat("\n"));
+        return choose(options, PURCHASE_TYPE_CHOICE_MESSAGE);
+    }
+
+    public static String chooseTypeOfPurchases() {
+        return choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE.concat("s"), ALL, BACK);
+    }
+
+    public static String choiceMenuItem() {
+        return choose(MenuItem.toList(), ACTION_CHOICE_MESSSAGE.concat(":"));
     }
 
     private static void displayMenu(List<String> items, String message) {

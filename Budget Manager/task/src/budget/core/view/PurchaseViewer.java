@@ -23,7 +23,7 @@ public class PurchaseViewer implements PurchaseViewStrategy {
     public void viewAllByType(String type) {
         System.out.printf("%n%s:", type);
         show(" ");
-        showTotalPrices(TOTAL.concat(" sum"));
+        showTotalPrices(String.join(" ", TOTAL, "sum"));
     }
 
     @Override

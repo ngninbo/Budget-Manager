@@ -15,39 +15,37 @@ public interface Menu {
 
     default boolean process(MenuItem item) {
 
-        if (item == null) {
-            return false;
+        if (item != null) {
+            switch (item) {
+                case INCOME:
+                    addIncome();
+                    break;
+                case PURCHASE:
+                    addPurchase();
+                    break;
+                case SHOW:
+                    showPurchases();
+                    break;
+                case BALANCE:
+                    showBalance();
+                    break;
+                case SAVE:
+                    save();
+                    break;
+                case LOAD:
+                    load();
+                    break;
+                case SORT:
+                    analyse();
+                    break;
+                case EXIT:
+                    exit();
+                    return false;
+                default:
+                    // Implement me
+            }
         }
 
-        switch (item) {
-            case INCOME:
-                addIncome();
-                break;
-            case PURCHASE:
-                addPurchase();
-                break;
-            case SHOW:
-                showPurchases();
-                break;
-            case BALANCE:
-                showBalance();
-                break;
-            case SAVE:
-                save();
-                break;
-            case LOAD:
-                load();
-                break;
-            case SORT:
-                analyse();
-                break;
-            case EXIT:
-                exit();
-                return true;
-            default:
-                // Implement me
-        }
-
-        return false;
+        return true;
     }
 }

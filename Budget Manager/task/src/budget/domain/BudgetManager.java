@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static budget.utils.BudgetManagerUtils.*;
+import static budget.utils.StringUtils.createRegex;
+import static budget.utils.StringUtils.matches;
 
 public class BudgetManager implements Menu, Serializable {
 
@@ -37,8 +39,8 @@ public class BudgetManager implements Menu, Serializable {
 
         String income = enterIncome();
 
-        if (!income.matches("\\d+")) {
-            System.out.println();
+        if (!matches(income, "\\d+")) {
+            System.out.println("Please enter a valid number!");
             return;
         }
 
@@ -50,11 +52,12 @@ public class BudgetManager implements Menu, Serializable {
     public void analyse() {
         while (true) {
             String input = choose(SortOption.toList(), "\nHow do you want to sort?", BACK);
-            final int numberOfOptions = SortOption.size() + 1;
+            final int min = 1;
+            final int max = SortOption.size() + 1;
 
-            if (!input.matches("[1-4]")) {
-                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, numberOfOptions);
-            } else if (String.valueOf(numberOfOptions).equals(input)) {
+            if (!matches(input, createRegex(min, max))) {
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, 1, max);
+            } else if (String.valueOf(max).equals(input)) {
                 System.out.println();
                 return;
             } else {
@@ -79,10 +82,11 @@ public class BudgetManager implements Menu, Serializable {
 
         while (true) {
             String input = choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE, BACK);
-            final int optionSize = PurchaseType.size() + 1;
-            if (!input.matches("[1-5]")) {
-                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, optionSize);
-            } else if (String.valueOf(optionSize).equals(input)){
+            final int min = 1;
+            final int max = PurchaseType.size() + 1;
+            if (!matches(input, createRegex(min, max))) {
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, max);
+            } else if (String.valueOf(max).equals(input)){
                 System.out.println();
                 return;
             } else {
@@ -97,16 +101,17 @@ public class BudgetManager implements Menu, Serializable {
     public void showPurchases() {
 
         if (shoppingList.isEmpty()) {
-            System.out.println("\n".concat(THE.concat(" ").concat(PURCHASE.concat(" ").concat(LIST_IS_EMPTY.concat("!\n")))));
+            System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY.concat("!\n"))));
             return;
         }
 
         while (true) {
             String input = chooseTypeOfPurchases();
-            final int numberOfItems = PurchaseType.size() + 2;
-            if (!input.matches("[1-6]")) {
-                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, numberOfItems);
-            } else if (String.valueOf(numberOfItems).equals(input)) {
+            final int max = PurchaseType.size() + 2;
+            final int min = 1;
+            if (!matches(input, createRegex(min, max))) {
+                System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, max);
+            } else if (String.valueOf(max).equals(input)) {
                 System.out.println();
                 return;
             } else {
@@ -127,7 +132,7 @@ public class BudgetManager implements Menu, Serializable {
             purchaseViewerContext.viewAllByType(type);
         } else {
             purchaseViewerContext.viewAll();
-            purchaseViewerContext.showTotalPrices(TOTAL.concat(" sum"));
+            purchaseViewerContext.showTotalPrices(String.join(" ", TOTAL, "sum"));
         }
     }
 
@@ -139,7 +144,7 @@ public class BudgetManager implements Menu, Serializable {
     private void addPurchase(PurchaseType type) {
         String name = enterPurchaseName();
         BigDecimal price = toBigDecimal(enterPrice());
-        Purchase purchase = PurchaseFactory.getPurchase(type, name, price);
+        Purchase purchase = PurchaseFactory.of(type, name, price);
 
         shoppingList.addPurchase(purchase);
         System.out.println("Purchase was added!");

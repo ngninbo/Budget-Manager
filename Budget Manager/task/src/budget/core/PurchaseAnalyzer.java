@@ -13,6 +13,7 @@ import budget.utils.StringUtils;
 import java.util.List;
 
 import static budget.utils.BudgetManagerUtils.*;
+import static budget.utils.StringUtils.createRegex;
 
 public class PurchaseAnalyzer {
 
@@ -61,8 +62,11 @@ public class PurchaseAnalyzer {
 
     private void sortByCertainType() {
         String input = chooseTypeOfPurchase();
-        if (!input.matches("[1-4]")) {
-            System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("\n"), 1, PurchaseType.size());
+        final int min = 1;
+        final int max = PurchaseType.size();
+        if (!input.matches(createRegex(min, max))) {
+
+            System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, max);
         } else {
             String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
             final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);

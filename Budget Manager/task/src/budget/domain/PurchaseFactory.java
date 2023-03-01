@@ -10,7 +10,15 @@ import java.math.BigDecimal;
 
 public class PurchaseFactory {
 
-    public static Purchase getPurchase(PurchaseType type, String name, BigDecimal price) {
+    /**
+     * Create a purchase based on given type.
+     * @param type {@link PurchaseType} - Type of purchase
+     * @param name {@link String} - name of purchase
+     * @param price {@link BigDecimal} - price of purchase
+     * @return {@link Purchase} if given type is {@link PurchaseType#OTHER},
+     * {@link Food} if given type {@link PurchaseType#FOOD} etc.
+     */
+    public static Purchase of(PurchaseType type, String name, BigDecimal price) {
         switch (type) {
             case FOOD:
                 return new Food(name, price);

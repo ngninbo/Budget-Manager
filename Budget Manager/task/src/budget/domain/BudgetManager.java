@@ -144,7 +144,7 @@ public class BudgetManager implements Menu, Serializable {
     private void addPurchase(PurchaseType type) {
         String name = enterPurchaseName();
         BigDecimal price = toBigDecimal(enterPrice());
-        Purchase purchase = PurchaseFactory.of(type, name, price);
+        Purchase purchase = PurchaseFactory.create(type, name, price);
 
         shoppingList.addPurchase(purchase);
         System.out.println("Purchase was added!");

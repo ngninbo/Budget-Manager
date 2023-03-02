@@ -67,7 +67,7 @@ public enum MenuItem {
             case SHOW:
                 return "%n%s) %s list of purchases\n";
             case SORT:
-                return "%s) Analyse (%s)\n";
+                return "%s) Analyze (%s)\n";
             default:
                 return "%s) %s\n";
         }

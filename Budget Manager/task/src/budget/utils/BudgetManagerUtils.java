@@ -43,9 +43,7 @@ public class BudgetManagerUtils {
      */
     public static String choose(List<String> options, String message, String... additionalOptions) {
 
-        if (additionalOptions.length > 0) {
-            Arrays.stream(additionalOptions).forEach(s -> options.add(String.format("\n%s) %s", options.size() + 1, s)));
-        }
+        Arrays.stream(additionalOptions).forEach(s -> options.add(String.format("\n%s) %s", options.size() + 1, s)));
 
         displayMenu(options, message);
         return new Scanner(System.in).nextLine();

@@ -18,7 +18,7 @@ public class PurchaseFactory {
      * @return {@link Purchase} if given type is {@link PurchaseType#OTHER},
      * {@link Food} if given type {@link PurchaseType#FOOD} etc.
      */
-    public static Purchase of(PurchaseType type, String name, BigDecimal price) {
+    public static Purchase create(PurchaseType type, String name, BigDecimal price) {
         switch (type) {
             case FOOD:
                 return new Food(name, price);
@@ -26,7 +26,6 @@ public class PurchaseFactory {
                 return new Clothes(name, price);
             case ENTERTAINMENT:
                 return new Entertainment(name, price);
-            case OTHER:
             default:
                 return new Purchase(name, price);
         }

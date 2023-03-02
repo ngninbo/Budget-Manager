@@ -35,6 +35,6 @@ public class PurchaseBuilder {
     }
 
     public Purchase build() {
-        return PurchaseFactory.of(type, name, price);
+        return PurchaseFactory.create(type, name, price);
     }
 }

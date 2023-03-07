@@ -3,7 +3,6 @@ package budget.core;
 import budget.domain.ShoppingList;
 import budget.utils.PurchaseSerializer;
 
-import java.io.File;
 import java.io.IOException;
 
 public class PurchaseFileManager implements FileManager<ShoppingList> {
@@ -24,16 +23,13 @@ public class PurchaseFileManager implements FileManager<ShoppingList> {
     }
 
     public ShoppingList load() {
-        File file = new File(filename);
 
-        if (file.exists()) {
-            try {
-                return PurchaseSerializer.deserialize(filename);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("\nPurchases were loaded!\n");
-            }
+        try {
+            final ShoppingList shoppingList = PurchaseSerializer.deserialize(filename);
+            System.out.println("\nLoading purchases succeed!\n");
+            return shoppingList;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.printf("%nLoading purchases failed: %s%n\n", e.getMessage());
         }
 
         return new ShoppingList();

@@ -13,7 +13,8 @@ public enum MenuItem {
     SAVE,
     LOAD,
     SORT,
-    EXIT;
+    EXIT,
+    UNKNOWN;
 
     /**
      * Get item by given index/ordinal.
@@ -28,7 +29,7 @@ public enum MenuItem {
         } else if (index < values().length) {
             return values()[index];
         } else {
-            throw new IllegalArgumentException();
+            return UNKNOWN;
         }
     }
 
@@ -42,6 +43,7 @@ public enum MenuItem {
 
     public static List<String> toList() {
         return Arrays.stream(values())
+                .filter(item -> !UNKNOWN.equals(item))
                 .map(MenuItem::format)
                 .collect(Collectors.toList());
     }
@@ -74,7 +76,7 @@ public enum MenuItem {
     }
 
     private int getIndex() {
-        return (ordinal() + 1) % values().length;
+        return (ordinal() + 1) % (values().length - 1);
     }
 
     private String getName() {

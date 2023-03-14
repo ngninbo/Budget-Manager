@@ -5,15 +5,11 @@ import budget.core.sort.PurchaseSortContext;
 import budget.core.view.PurchaseViewerContext;
 import budget.core.view.PurchaseViewer;
 import budget.domain.PurchaseCollector;
-import budget.model.Purchase;
-import budget.utils.PurchaseType;
+import budget.menu.PurchaseView;
 import budget.utils.SortOption;
 import budget.utils.StringUtils;
 
-import java.util.List;
-
 import static budget.utils.BudgetManagerUtils.*;
-import static budget.utils.StringUtils.createRegex;
 
 public class PurchaseAnalyzer {
 
@@ -61,23 +57,6 @@ public class PurchaseAnalyzer {
     }
 
     private void sortByCertainType() {
-        String input = chooseTypeOfPurchase();
-        final int min = 1;
-        final int max = PurchaseType.size();
-        if (!input.matches(createRegex(min, max))) {
-
-            System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, max);
-        } else {
-            String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
-            final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
-
-            if (purchases.isEmpty()) {
-                System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY).concat("!")));
-                return;
-            }
-
-            viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
-            viewerContext.viewAllByType(type);
-        }
+        new PurchaseView(viewerContext).processInput();
     }
 }

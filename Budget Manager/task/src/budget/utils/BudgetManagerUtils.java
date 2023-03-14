@@ -1,7 +1,7 @@
 package budget.utils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class BudgetManagerUtils {
@@ -16,59 +16,16 @@ public class BudgetManagerUtils {
     public static final String THE = "The";
     public static final String LIST_IS_EMPTY = "list is empty";
     public static final String NUMBER_RANGE_REGEX = "[%d-%d]";
+    public static final String ENTER_INCOME = "\nEnter income";
+    public static final String ENTER_PURCHASE_NAME = "\nEnter purchase name";
+    public static final String ENTER_PRICE = "Enter its price";
 
     public static String enter(String command) {
         System.out.printf("%s:\n", command);
         return new Scanner(System.in).nextLine();
     }
 
-    public static String enterIncome() {
-        return enter("\nEnter income");
-    }
-
-    public static String enterPurchaseName() {
-        return enter("\nEnter purchase name");
-    }
-
-    public static String enterPrice() {
-        return enter("Enter its price");
-    }
-
-    /**
-     * Display options inclusive additional ones and request user to choose one of them
-     * @param options {@link List} List of options to be displayed
-     * @param message {@link String} Message to be displayed
-     * @param additionalOptions Array of {@link String} - additional options - optional
-     * @return {@link String} Index of option choose by the user
-     */
-    public static String choose(List<String> options, String message, String... additionalOptions) {
-
-        Arrays.stream(additionalOptions).forEach(s -> options.add(String.format("\n%s) %s", options.size() + 1, s)));
-
-        displayMenu(options, message);
-        return new Scanner(System.in).nextLine();
-    }
-
-    public static String chooseTypeOfPurchase() {
-        final List<String> options = PurchaseType.toList();
-        final int index = options.size() - 1;
-        options.set(index, options.get(index).concat("\n"));
-        return choose(options, PURCHASE_TYPE_CHOICE_MESSAGE);
-    }
-
-    public static String chooseTypeOfPurchases() {
-        return choose(PurchaseType.toList(), PURCHASE_TYPE_CHOICE_MESSAGE.concat("s"), ALL, BACK);
-    }
-
-    public static String choiceMenuItem() {
-        return choose(MenuItem.toList(), ACTION_CHOICE_MESSSAGE.concat(":"));
-    }
-
-    private static void displayMenu(List<String> items, String message) {
-        StringBuilder sb = new StringBuilder(message);
-
-        items.forEach(sb::append);
-
-        System.out.printf("%s", sb);
+    public static BigDecimal toBigDecimal(String input) {
+        return new BigDecimal(input.replace("$", "")).setScale(2, RoundingMode.HALF_UP);
     }
 }

@@ -956,9 +956,6 @@ files:
 - name: src/budget/core/FileManager.java
   visible: true
   learner_created: true
-- name: src/budget/domain/Menu.java
-  visible: true
-  learner_created: true
 - name: src/budget/core/view/PurchaseViewStrategy.java
   visible: true
   text: |
@@ -1123,6 +1120,30 @@ files:
                     '}';
         }
     }
+  learner_created: true
+- name: src/budget/menu/PurchaseAddMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/PurchaseAnalyseMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/PurchaseShowMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/StartMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/ShoppingMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/AbstractMenu.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/PurchaseView.java
+  visible: true
+  learner_created: true
+- name: src/budget/menu/Menu.java
+  visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment
 status: Solved

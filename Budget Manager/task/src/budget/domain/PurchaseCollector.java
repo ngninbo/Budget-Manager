@@ -7,10 +7,8 @@ import budget.utils.PurchaseType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PurchaseCollector implements Serializable {
 
@@ -38,19 +36,9 @@ public class PurchaseCollector implements Serializable {
      * @return {@link Map} category-amount pair - sorted by category.
      */
     public Map<String, BigDecimal> sum() {
-        Map<String, BigDecimal> map = new HashMap<>();
-
-        for (PurchaseType purchaseType : PurchaseType.values()) {
-            String type = purchaseType.capitalize();
-            List<Purchase> tmp = PurchaseFilter.filter(purchases, type);
-            BigDecimal sum = tmp.stream()
-                    .map(Purchase::getPrice)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            map.put(type, sum);
-        }
-
-        return map;
+        return Arrays.stream(PurchaseType.values())
+                .map(PurchaseType::capitalize)
+                .collect(Collectors.toMap(type -> type, this::sumOfPurchases, (a, b) -> b));
     }
 
     public BigDecimal getTotalPrice() {
@@ -68,5 +56,12 @@ public class PurchaseCollector implements Serializable {
         StringBuilder sb = new StringBuilder();
         purchases.forEach(purchase -> sb.append(String.format("%n%s%s$%s", purchase.getName(), delimiter, purchase.getPrice())));
         return sb.toString();
+    }
+
+    private BigDecimal sumOfPurchases(String type) {
+        return PurchaseFilter.filter(purchases, type)
+                .stream()
+                .map(Purchase::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

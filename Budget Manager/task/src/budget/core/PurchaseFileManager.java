@@ -9,8 +9,12 @@ public class PurchaseFileManager implements FileManager<ShoppingList> {
 
     private final String filename;
 
-    public PurchaseFileManager(String filename) {
+    private PurchaseFileManager(String filename) {
         this.filename = filename;
+    }
+
+    public static PurchaseFileManager of(String filename) {
+        return new PurchaseFileManager(filename);
     }
 
     public void save(ShoppingList shoppingList) {

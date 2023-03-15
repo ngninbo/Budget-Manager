@@ -23,6 +23,10 @@ public class BudgetManager implements Menu, Serializable {
         this.fileManager = purchaseFileManager;
     }
 
+    public static BudgetManager of(String filename) {
+        return new BudgetManager(new ShoppingList(), PurchaseFileManager.of(filename));
+    }
+
     @Override
     public void showBalance() {
         System.out.printf("%nBalance: $%s%n\n", shoppingList.getBudget());

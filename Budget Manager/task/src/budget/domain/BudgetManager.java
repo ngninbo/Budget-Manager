@@ -2,6 +2,8 @@ package budget.domain;
 
 import budget.core.FileManager;
 import budget.core.PurchaseFileManager;
+import budget.core.PurchaseLoadingException;
+import budget.core.PurchaseSavingException;
 import budget.menu.Menu;
 import budget.menu.PurchaseAddMenu;
 import budget.menu.PurchaseAnalyseMenu;
@@ -53,12 +55,20 @@ public class BudgetManager implements Menu, Serializable {
 
     @Override
     public void save() {
-        fileManager.save(shoppingList);
+        try {
+            fileManager.save(shoppingList);
+        } catch (PurchaseSavingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void load() {
-        this.shoppingList = fileManager.load();
+        try {
+            this.shoppingList = fileManager.load();
+        } catch (PurchaseLoadingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1139,10 +1139,25 @@ files:
 - name: src/budget/menu/AbstractMenu.java
   visible: true
   learner_created: true
-- name: src/budget/menu/PurchaseView.java
+- name: src/budget/menu/Menu.java
   visible: true
   learner_created: true
-- name: src/budget/menu/Menu.java
+- name: src/budget/menu/PurchaseSortByCertainTypeViewer.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/Command.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseTypeSortCommand.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/view/PurchaseSortAllCommand.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/PurchaseLoadingException.java
+  visible: true
+  learner_created: true
+- name: src/budget/core/PurchaseSavingException.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7028#comment

@@ -1,5 +1,7 @@
 package budget.menu;
 
+import budget.core.view.Command;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -7,7 +9,7 @@ import static budget.utils.BudgetManagerUtils.VALID_NUMBER_INPUT_REQUIRED_TEXT;
 import static budget.utils.StringUtils.createRegex;
 import static budget.utils.StringUtils.matches;
 
-public abstract class AbstractMenu {
+public abstract class AbstractMenu extends Command {
 
     protected abstract String choiceOption();
     protected abstract void process(String input);

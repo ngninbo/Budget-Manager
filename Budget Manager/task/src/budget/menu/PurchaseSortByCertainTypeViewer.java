@@ -4,7 +4,6 @@ import budget.core.sort.PurchaseSortContext;
 import budget.core.sort.PurchaseSorter;
 import budget.core.view.PurchaseViewer;
 import budget.core.view.PurchaseViewerContext;
-import budget.core.view.Command;
 import budget.domain.PurchaseCollector;
 import budget.model.Purchase;
 import budget.utils.PurchaseType;
@@ -17,6 +16,8 @@ import static budget.utils.BudgetManagerUtils.LIST_IS_EMPTY;
 public class PurchaseSortByCertainTypeViewer extends AbstractMenu {
 
     private final PurchaseViewerContext viewerContext;
+    private List<Purchase> purchases;
+    private String type;
 
     public PurchaseSortByCertainTypeViewer(PurchaseViewerContext viewerContext) {
         super(PurchaseType.toList());
@@ -32,8 +33,9 @@ public class PurchaseSortByCertainTypeViewer extends AbstractMenu {
 
     @Override
     protected void process(String input) {
-        String type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
-        getViewerCommand(type).execute();
+        type = PurchaseType.get(Integer.parseInt(input) - 1).capitalize();
+        purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
+        super.execute();
     }
 
     @Override
@@ -52,25 +54,19 @@ public class PurchaseSortByCertainTypeViewer extends AbstractMenu {
         processInput();
     }
 
-    private Command getViewerCommand(String type) {
-        final List<Purchase> purchases = new PurchaseSortContext(new PurchaseSorter(viewerContext.getCollector())).sortByType(type);
+    @Override
+    public boolean hasEmptyList() {
+        return purchases.isEmpty();
+    }
 
-        return new Command() {
-            @Override
-            public boolean hasEmptyList() {
-                return purchases.isEmpty();
-            }
+    @Override
+    public void sortAndViewItems() {
+        viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
+        viewerContext.viewAllByType(type);
+    }
 
-            @Override
-            public void sortAndViewItems() {
-                viewerContext.setViewStrategy(new PurchaseViewer(new PurchaseCollector(purchases)));
-                viewerContext.viewAllByType(type);
-            }
-
-            @Override
-            protected void printListIsEmpty() {
-                System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY).concat("!")));
-            }
-        };
+    @Override
+    protected void printListIsEmpty() {
+        System.out.println("\n".concat(String.join(" ", THE, PURCHASE, LIST_IS_EMPTY).concat("!")));
     }
 }

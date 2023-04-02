@@ -1,5 +1,6 @@
 package budget.core;
 
+import budget.core.view.Command;
 import budget.core.view.PurchaseSortAllCommand;
 import budget.core.view.PurchaseTypeSortCommand;
 import budget.core.view.PurchaseViewerContext;
@@ -15,16 +16,17 @@ public class PurchaseAnalyzer {
     }
 
     public void sort(SortOption option) {
+        getSortStrategy(option).execute();
+    }
+
+    private Command getSortStrategy(SortOption option) {
         switch (option) {
             case SORT_BY_TYPE:
-                new PurchaseTypeSortCommand(viewerContext).execute();
-                break;
+                return new PurchaseTypeSortCommand(viewerContext);
             case SORT_CERTAIN_TYPE:
-                new PurchaseSortByCertainTypeViewer(viewerContext).execute();
-                break;
+                return new PurchaseSortByCertainTypeViewer(viewerContext);
             case SORT_ALL_PURCHASES:
-                new PurchaseSortAllCommand(viewerContext).execute();
-                break;
+                return new PurchaseSortAllCommand(viewerContext);
             default:
                 throw new IllegalArgumentException("Invalid sort type provided");
         }

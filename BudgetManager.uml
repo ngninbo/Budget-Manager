@@ -3,45 +3,45 @@
   <ID>JAVA</ID>
   <OriginalElement>/Users/bdongmo-ngnintedem/Desktop/selbststudium/Budget Manager/Budget Manager/task/src/budget/Main.java</OriginalElement>
   <nodes>
-    <node x="0.0" y="632.5">budget.menu.PurchaseAnalyseMenu</node>
+    <node x="796.0" y="632.5">budget.menu.PurchaseAnalyseMenu</node>
     <node x="0.0" y="1523.0">budget.core.sort.SortUtils</node>
     <node x="1540.0" y="1523.0">budget.Main</node>
-    <node x="614.0" y="0.0">budget.menu.AbstractMenu</node>
-    <node x="0.0" y="1016.0">budget.core.view.PurchaseSortAllCommand</node>
-    <node x="305.0" y="599.5">budget.menu.PurchaseAddMenu</node>
-    <node x="1212.5" y="304.0">budget.domain.BudgetManager</node>
-    <node x="1641.5" y="194.0">budget.core.view.PurchaseViewer</node>
+    <node x="554.75" y="0.0">budget.menu.AbstractMenu</node>
+    <node x="406.0" y="1016.0">budget.core.view.PurchaseSortAllCommand</node>
+    <node x="515.0" y="599.5">budget.menu.PurchaseAddMenu</node>
+    <node x="1153.25" y="304.0">budget.domain.BudgetManager</node>
+    <node x="1582.25" y="194.0">budget.core.view.PurchaseViewer</node>
     <node x="754.0" y="1523.0">budget.core.PurchaseFilter</node>
     <node x="1151.0" y="822.0">budget.core.sort.PurchaseSortStrategy</node>
-    <node x="1668.0" y="0.0">budget.core.view.PurchaseViewStrategy</node>
-    <node x="1292.5" y="0.0">budget.menu.Menu</node>
+    <node x="1608.75" y="0.0">budget.core.view.PurchaseViewStrategy</node>
+    <node x="1233.25" y="0.0">budget.menu.Menu</node>
     <node x="292.0" y="1206.0">budget.core.PurchaseBuilder</node>
     <node x="851.5" y="822.0">budget.domain.ShoppingListAction</node>
     <node x="387.0" y="1523.0">budget.core.PurchaseAnalyzer</node>
     <node x="1151.0" y="971.0">budget.core.sort.PurchaseSorter</node>
     <node x="641.0" y="1206.0">budget.core.view.PurchaseViewerContext</node>
-    <node x="811.0" y="621.5">budget.menu.PurchaseShowMenu</node>
+    <node x="224.99999999999994" y="621.5">budget.menu.PurchaseShowMenu</node>
     <node x="0.0" y="1690.0">budget.core.PurchaseLoadingException</node>
-    <node x="285.5" y="822.0">budget.core.view.Command</node>
-    <node x="394.0" y="1016.0">budget.core.view.PurchaseTypeSortCommand</node>
+    <node x="291.5" y="822.0">budget.core.view.Command</node>
+    <node x="0.0" y="1016.0">budget.core.view.PurchaseTypeSortCommand</node>
     <node x="0.0" y="1333.0">budget.core.PurchaseFileManager</node>
     <node x="1128.0" y="1523.0">budget.domain.PurchaseFactory</node>
-    <node x="401.5" y="371.0">budget.menu.ShoppingMenu</node>
+    <node x="342.24999999999994" y="371.0">budget.menu.ShoppingMenu</node>
     <node x="313.0" y="1690.0">budget.core.PurchaseSavingException</node>
     <node x="1507.0" y="822.0">budget.domain.PurchaseCollector</node>
     <node x="34.0" y="1206.0">budget.core.FileManager</node>
     <node x="1413.0" y="1206.0">budget.BudgetManagerApplication</node>
-    <node x="742.5" y="349.0">budget.menu.PurchaseSortByCertainTypeViewer</node>
+    <node x="683.25" y="349.0">budget.menu.PurchaseSortByCertainTypeViewer</node>
     <node x="1036.0" y="1206.0">budget.core.sort.PurchaseSortContext</node>
-    <node x="586.0" y="588.0">budget.menu.StartMenu</node>
+    <node x="0.0" y="588.0">budget.menu.StartMenu</node>
     <node x="825.0" y="949.0">budget.domain.ShoppingList</node>
   </nodes>
   <notes />
   <edges>
     <edge source="budget.menu.PurchaseAddMenu" target="budget.menu.ShoppingMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-83.0" />
-      <point x="435.5" y="563.0" />
-      <point x="562.0" y="563.0" />
+      <point x="645.5" y="563.0" />
+      <point x="502.74999999999994" y="563.0" />
       <point x="0.0" y="72.5" />
     </edge>
     <edge source="budget.core.sort.PurchaseSorter" target="budget.core.sort.PurchaseSortStrategy" relationship="REALIZATION">
@@ -50,26 +50,26 @@
     </edge>
     <edge source="budget.menu.PurchaseAnalyseMenu" target="budget.menu.ShoppingMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-50.0" />
-      <point x="142.5" y="563.0" />
-      <point x="562.0" y="563.0" />
+      <point x="938.5" y="563.0" />
+      <point x="502.74999999999994" y="563.0" />
       <point x="0.0" y="72.5" />
     </edge>
     <edge source="budget.menu.PurchaseSortByCertainTypeViewer" target="budget.menu.AbstractMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-94.5" />
-      <point x="955.0" y="324.0" />
-      <point x="758.5" y="324.0" />
+      <point x="895.75" y="324.0" />
+      <point x="699.25" y="324.0" />
       <point x="0.0" y="149.5" />
     </edge>
     <edge source="budget.core.view.PurchaseSortAllCommand" target="budget.core.view.Command" relationship="GENERALIZATION">
       <point x="0.0" y="-72.5" />
-      <point x="187.0" y="991.0" />
-      <point x="387.0" y="991.0" />
+      <point x="593.0" y="991.0" />
+      <point x="393.0" y="991.0" />
       <point x="0.0" y="72.0" />
     </edge>
     <edge source="budget.core.view.PurchaseTypeSortCommand" target="budget.core.view.Command" relationship="GENERALIZATION">
       <point x="0.0" y="-72.5" />
-      <point x="587.0" y="991.0" />
-      <point x="387.0" y="991.0" />
+      <point x="193.0" y="991.0" />
+      <point x="393.0" y="991.0" />
       <point x="0.0" y="72.0" />
     </edge>
     <edge source="budget.core.view.PurchaseViewer" target="budget.core.view.PurchaseViewStrategy" relationship="REALIZATION">
@@ -78,8 +78,8 @@
     </edge>
     <edge source="budget.menu.StartMenu" target="budget.menu.ShoppingMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-94.5" />
-      <point x="688.5" y="563.0" />
-      <point x="562.0" y="563.0" />
+      <point x="102.5" y="563.0" />
+      <point x="502.74999999999994" y="563.0" />
       <point x="0.0" y="72.5" />
     </edge>
     <edge source="budget.domain.BudgetManager" target="budget.menu.Menu" relationship="REALIZATION">
@@ -92,8 +92,8 @@
     </edge>
     <edge source="budget.menu.PurchaseShowMenu" target="budget.menu.ShoppingMenu" relationship="GENERALIZATION">
       <point x="0.0" y="-61.0" />
-      <point x="946.0" y="563.0" />
-      <point x="562.0" y="563.0" />
+      <point x="359.99999999999994" y="563.0" />
+      <point x="502.74999999999994" y="563.0" />
       <point x="0.0" y="72.5" />
     </edge>
     <edge source="budget.core.PurchaseFileManager" target="budget.core.FileManager" relationship="REALIZATION">
@@ -101,14 +101,16 @@
       <point x="0.0" y="38.5" />
     </edge>
     <edge source="budget.menu.ShoppingMenu" target="budget.menu.AbstractMenu" relationship="GENERALIZATION">
-      <point x="-5.6843418860808015E-14" y="-72.5" />
-      <point x="562.0" y="324.0" />
-      <point x="758.5" y="324.0" />
+      <point x="0.0" y="-72.5" />
+      <point x="502.74999999999994" y="324.0" />
+      <point x="699.25" y="324.0" />
       <point x="0.0" y="149.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.4679886685552408" showDependencies="false" x="961.5" y="872.5" />
-  <SelectedNodes />
+  <settings layout="Hierarchic" zoom="0.3801699716713881" showDependencies="false" x="932.0" y="872.5" />
+  <SelectedNodes>
+    <node>budget.core.view.PurchaseViewer</node>
+  </SelectedNodes>
   <Categories>
     <Category>Constructors</Category>
     <Category>Fields</Category>

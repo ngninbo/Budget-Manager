@@ -2,10 +2,6 @@ package budget.core.view;
 
 public abstract class Command {
 
-    protected abstract boolean hasEmptyList();
-    protected abstract void sortAndViewItems();
-    protected abstract void printListIsEmpty();
-
     public void execute() {
         if (hasEmptyList()) {
             printListIsEmpty();
@@ -13,5 +9,17 @@ public abstract class Command {
         }
 
         sortAndViewItems();
+    }
+
+    protected boolean hasEmptyList() {
+        return false;
+    }
+
+    protected void sortAndViewItems() {
+        System.out.println("I should be implemented to sort and view items!");
+    }
+
+    protected void printListIsEmpty() {
+        System.out.println("I should be implemented to print if a list is empty!");
     }
 }

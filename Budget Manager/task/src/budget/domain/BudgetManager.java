@@ -8,22 +8,23 @@ import budget.menu.Menu;
 import budget.menu.PurchaseAddMenu;
 import budget.menu.PurchaseAnalyseMenu;
 import budget.menu.PurchaseShowMenu;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.io.Serializable;
 
 import static budget.utils.BudgetManagerUtils.*;
 import static budget.utils.StringUtils.matches;
 
+@AllArgsConstructor
 public class BudgetManager implements Menu, Serializable {
 
     private static final long serialVersionUID = 1222L;
-    private ShoppingList shoppingList;
-    private final FileManager<ShoppingList> fileManager;
 
-    public BudgetManager(ShoppingList shoppingList, PurchaseFileManager purchaseFileManager) {
-        this.shoppingList = shoppingList;
-        this.fileManager = purchaseFileManager;
-    }
+    @Getter
+    private ShoppingList shoppingList;
+
+    private final FileManager<ShoppingList> fileManager;
 
     public static BudgetManager of(String filename) {
         return new BudgetManager(new ShoppingList(), PurchaseFileManager.of(filename));
@@ -84,10 +85,6 @@ public class BudgetManager implements Menu, Serializable {
     @Override
     public void exit() {
         System.out.println("\nBye!");
-    }
-
-    public ShoppingList getShoppingList() {
-        return shoppingList;
     }
 
     private String enterIncome() {

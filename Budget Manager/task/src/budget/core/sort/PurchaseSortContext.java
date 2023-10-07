@@ -1,16 +1,14 @@
 package budget.core.sort;
 
 import budget.model.Purchase;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class PurchaseSortContext {
 
     private final PurchaseSortStrategy sortStrategy;
-
-    public PurchaseSortContext(PurchaseSortStrategy sortStrategy) {
-        this.sortStrategy = sortStrategy;
-    }
 
     public List<Purchase> sortAll() {
         return sortStrategy.sortAll();

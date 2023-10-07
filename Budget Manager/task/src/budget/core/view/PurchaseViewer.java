@@ -2,16 +2,16 @@ package budget.core.view;
 
 import budget.domain.PurchaseCollector;
 import budget.utils.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import static budget.utils.BudgetManagerUtils.*;
 
+@AllArgsConstructor
 public class PurchaseViewer implements PurchaseViewStrategy {
 
+    @Getter
     private final PurchaseCollector purchaseCollector;
-
-    public PurchaseViewer(PurchaseCollector purchaseCollector) {
-        this.purchaseCollector = purchaseCollector;
-    }
 
     @Override
     public void viewAll() {
@@ -38,10 +38,5 @@ public class PurchaseViewer implements PurchaseViewStrategy {
             return;
         }
         System.out.print(purchaseCollector.format(delimiter));
-    }
-
-    @Override
-    public PurchaseCollector getCollector() {
-        return purchaseCollector;
     }
 }

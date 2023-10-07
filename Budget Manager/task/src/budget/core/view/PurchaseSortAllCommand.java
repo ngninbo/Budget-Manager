@@ -4,16 +4,14 @@ import budget.core.sort.PurchaseSortContext;
 import budget.core.sort.PurchaseSorter;
 import budget.domain.PurchaseCollector;
 import budget.utils.StringUtils;
+import lombok.AllArgsConstructor;
 
 import static budget.utils.BudgetManagerUtils.*;
 
+@AllArgsConstructor
 public class PurchaseSortAllCommand extends Command {
 
     private final PurchaseViewerContext viewerContext;
-
-    public PurchaseSortAllCommand(PurchaseViewerContext viewerContext) {
-        this.viewerContext = viewerContext;
-    }
 
     @Override
     public boolean hasEmptyList() {

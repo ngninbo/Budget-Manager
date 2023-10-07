@@ -31,6 +31,5 @@ public abstract class ShoppingMenu extends AbstractMenu {
 
     protected void addAdditionalOptions(String... additionalOptions) {
         Arrays.stream(additionalOptions).forEach(s -> options.add(String.format("\n%s) %s", options.size() + 1, s)));
-        super.size = options.size();
     }
 }

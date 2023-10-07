@@ -3,6 +3,9 @@ package budget.domain;
 import budget.core.PurchaseFilter;
 import budget.model.Purchase;
 import budget.utils.PurchaseType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,25 +13,17 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseCollector implements Serializable {
 
     private static final long serialVersionUID = 112454L;
 
+    @Getter
     private List<Purchase> purchases = new ArrayList<>();
-
-    public PurchaseCollector() {
-    }
-
-    public PurchaseCollector(List<Purchase> purchases) {
-        this.purchases = purchases;
-    }
 
     public void add(Purchase purchase) {
         purchases.add(purchase);
-    }
-
-    public List<Purchase> getItems() {
-        return purchases;
     }
 
     /**

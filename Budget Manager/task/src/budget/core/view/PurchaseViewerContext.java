@@ -2,18 +2,14 @@ package budget.core.view;
 
 
 import budget.domain.PurchaseCollector;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@Setter
 public class PurchaseViewerContext {
 
     private PurchaseViewStrategy viewStrategy;
-
-    public PurchaseViewerContext(PurchaseViewStrategy viewStrategy) {
-        this.viewStrategy = viewStrategy;
-    }
-
-    public void setViewStrategy(PurchaseViewStrategy viewStrategy) {
-        this.viewStrategy = viewStrategy;
-    }
 
     public void viewAll() {
         viewStrategy.viewAll();
@@ -36,6 +32,6 @@ public class PurchaseViewerContext {
     }
 
     public PurchaseCollector getCollector() {
-        return viewStrategy.getCollector();
+        return viewStrategy.getPurchaseCollector();
     }
 }

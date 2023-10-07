@@ -16,14 +16,14 @@ public class PurchaseSorter implements PurchaseSortStrategy {
 
     @Override
     public List<Purchase> sortAll() {
-        List<Purchase> purchases = purchaseCollector.getItems();
+        List<Purchase> purchases = purchaseCollector.getPurchases();
         SortUtils.sort(purchases);
         return purchases;
     }
 
     @Override
     public List<Purchase> sortByCertainType(String type) {
-        List<Purchase> purchases = PurchaseFilter.filter(purchaseCollector.getItems(), type);
+        List<Purchase> purchases = PurchaseFilter.filter(purchaseCollector.getPurchases(), type);
         SortUtils.sort(purchases);
         return purchases;
     }

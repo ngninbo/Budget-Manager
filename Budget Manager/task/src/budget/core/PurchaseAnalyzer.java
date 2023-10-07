@@ -6,14 +6,12 @@ import budget.core.view.PurchaseTypeSortCommand;
 import budget.core.view.PurchaseViewerContext;
 import budget.menu.PurchaseSortByCertainTypeViewer;
 import budget.utils.SortOption;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class PurchaseAnalyzer {
 
     private final PurchaseViewerContext viewerContext;
-
-    public PurchaseAnalyzer(PurchaseViewerContext viewerContext) {
-        this.viewerContext = viewerContext;
-    }
 
     public void sort(SortOption option) {
         getSortStrategy(option).execute();

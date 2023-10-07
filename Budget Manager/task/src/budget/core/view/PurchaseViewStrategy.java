@@ -9,5 +9,5 @@ public interface PurchaseViewStrategy {
     void showTotalPrices(String label);
     void show(String delimiter);
 
-    PurchaseCollector getCollector();
+    PurchaseCollector getPurchaseCollector();
 }

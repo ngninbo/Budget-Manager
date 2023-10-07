@@ -2,14 +2,12 @@ package budget.core;
 
 import budget.domain.ShoppingList;
 import budget.utils.PurchaseSerializer;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class PurchaseFileManager implements FileManager<ShoppingList> {
 
     private final String filename;
-
-    private PurchaseFileManager(String filename) {
-        this.filename = filename;
-    }
 
     public static PurchaseFileManager of(String filename) {
         return new PurchaseFileManager(filename);

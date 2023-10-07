@@ -12,7 +12,7 @@ public class StartMenu extends ShoppingMenu {
     public StartMenu(Menu menu) {
         super(menu.getShoppingList(), MenuItem.toList());
         this.menu = menu;
-        min = 0;
+        setMin(0);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class StartMenu extends ShoppingMenu {
 
     @Override
     protected void printErrorMessage() {
-        System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("%n"), min, options.size() - 1);
+        System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT.concat("%n"), getMin(), options.size() - 1);
     }
 }

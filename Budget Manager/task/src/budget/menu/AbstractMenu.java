@@ -1,6 +1,9 @@
 package budget.menu;
 
 import budget.core.view.Command;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,12 +18,12 @@ public abstract class AbstractMenu extends Command {
     protected abstract void process(String input);
 
     protected List<String> options;
-    protected int min = 1;
-    protected int size;
+    @Setter(AccessLevel.PROTECTED)
+    @Getter(AccessLevel.PROTECTED)
+    private int min;
 
     public AbstractMenu(List<String> options) {
         this.options = options;
-        this.size = options.size();
     }
 
     protected boolean processInput() {
@@ -30,13 +33,17 @@ public abstract class AbstractMenu extends Command {
     protected boolean processInput(String input) {
         if (wrong(input)) {
             printErrorMessage();
-        } else if (String.valueOf(size).equals(input)) {
+        } else if (String.valueOf(getNumberOfOptions()).equals(input)) {
             System.out.println();
             return true;
         } else {
             process(input);
         }
         return false;
+    }
+
+    private int getNumberOfOptions() {
+        return options.size();
     }
 
     /**
@@ -58,10 +65,10 @@ public abstract class AbstractMenu extends Command {
     }
 
     protected boolean wrong(String input) {
-        return !matches(input, createRegex(min, size));
+        return !matches(input, createRegex(min, getNumberOfOptions()));
     }
 
     protected void printErrorMessage() {
-        System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, size);
+        System.out.printf(VALID_NUMBER_INPUT_REQUIRED_TEXT, min, getNumberOfOptions());
     }
 }

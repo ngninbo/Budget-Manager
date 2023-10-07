@@ -1,11 +1,13 @@
 package budget.domain;
 
 import budget.model.Purchase;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Getter
 public class ShoppingList implements ShoppingListAction, Serializable {
 
     private static final long serialVersionUID = 11234L;
@@ -23,14 +25,6 @@ public class ShoppingList implements ShoppingListAction, Serializable {
     public void addPurchase(Purchase purchase) {
         purchaseCollector.add(purchase);
         addIncome(purchase.getPrice().negate());
-    }
-
-    public PurchaseCollector getPurchaseCollector() {
-        return purchaseCollector;
-    }
-
-    public BigDecimal getBudget() {
-        return budget;
     }
 
     public boolean isEmpty() {
